@@ -28,6 +28,9 @@ HTML body a {
   text-decoration: none;
   color: #3490c3;
 }
+.link-img {
+  display: block;
+}
 /*
 *	PICTURES SIZE
 */

@@ -3,18 +3,21 @@
  */
 
 var postBodyImg = document.querySelectorAll('.attach, .linked-image');
-
 for (var i = 0; i < postBodyImg.length; i++) {
 	var img = postBodyImg[i];
-	var span = document.createElement('span');
+	var link = document.createElement('a');
+		link.className = "link-img";
 	if (img.parentNode.nodeName == "A") {
-		span.innerHTML = img.parentNode.title;
-		img.parentNode.appendChild(span);
+		var text = document.createTextNode(img.parentNode.title);
+		img.parentNode.appendChild(text);
+		img.parentNode.className = "link-img";
 	}
 	else {
-		span.innerHTML = img.alt;
-		img.parentNode.insertBefore(span, img.nextSibling);
+		link.innerHTML = img.alt;
+		link.href = img.src;
+		img.parentNode.insertBefore(link, img.nextSibling);
 	}
+	img.parentNode.replaceChild(link, img);
 }
 
 /**
