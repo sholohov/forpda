@@ -43,7 +43,9 @@ function substitutionAttributes(event) {
 			var images = target.querySelectorAll('img');
 			for (var i = 0; i < images.length; i++) {
 				var img = images[i];
+				if (!img.hasAttribute('data-image-src')) continue;
 				img.src = img.dataset.imageSrc;
+				img.removeAttribute('data-image-src');
 			}
 			return;
 		}
