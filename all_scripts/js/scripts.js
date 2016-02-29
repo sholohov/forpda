@@ -1,7 +1,7 @@
 /**
  *		IMG OFF
  */
-
+/*
 var postBodyImg = document.querySelectorAll('.attach, .linked-image');
 for (var i = 0; i < postBodyImg.length; i++) {
 	var img = postBodyImg[i];
@@ -19,7 +19,7 @@ for (var i = 0; i < postBodyImg.length; i++) {
 	}
 	img.parentNode.replaceChild(link, img);
 }
-
+*/
 /**
  *		SUBSTITUTION ATTRIBUTES
  */
@@ -29,6 +29,7 @@ for (var i = 0; i < postBlockSpoils.length; i++) {
 	var images = postBlockSpoils[i].querySelectorAll('img');
 	for (var j = 0; j < images.length; j++) {
 		var img = images[j];
+		if (!img.hasAttribute('src')) continue;
 		img.dataset.imageSrc = img.src;
 		img.removeAttribute('src');
 	}
