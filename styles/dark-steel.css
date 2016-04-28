@@ -180,16 +180,13 @@ span[style*="font-size:8pt"] * {
 .post-block.quote > .block-title {
   color: #abc4e6;
 }
-.post-block.quote > .block-title:empty {
-  margin-left: 0;
-}
 .post-block.quote > .block-title:empty:before {
   content: 'Цитата';
 }
 .post-block.quote > .block-title a[title="Перейти к сообщению"] {
   float: left;
   overflow: hidden;
-  margin: -0.25em 0.125rem 0 -0.25rem;
+  margin: 0 0.125rem 0 -0.25rem;
   opacity: 0.8;
   font-style: normal;
 }
@@ -913,7 +910,7 @@ span[style*="font-size:8pt"] * {
 #multimoderation > form a[title="Перейти к сообщению"] {
   display: inline-block;
   margin: 0;
-  padding: 0.25em;
+  padding: 0 0.25em;
   text-decoration: none;
 }
 .post_body a[title="Перейти к сообщению"] > img,
@@ -925,7 +922,6 @@ span[style*="font-size:8pt"] * {
   content: '«';
   display: inline-block;
   position: relative;
-  top: ;
   width: 1rem;
   height: 1rem;
   margin: 0;
