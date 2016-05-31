@@ -186,7 +186,7 @@ span[style*="font-size:8pt"] * {
 .post-block.quote > .block-title a[title="Перейти к сообщению"] {
   float: left;
   overflow: hidden;
-  margin: 0 0.125rem 0 -0.25rem;
+  margin: 0 0.125rem 0 -0.25rem !important;
   opacity: 0.8;
   font-style: normal;
 }
@@ -906,31 +906,6 @@ span[style*="font-size:8pt"] * {
     border: none;
   }
 }
-.post_body a[title="Перейти к сообщению"],
-#multimoderation > form a[title="Перейти к сообщению"] {
-  display: inline-block;
-  margin: 0;
-  padding: 0 0.25em;
-  text-decoration: none;
-}
-.post_body a[title="Перейти к сообщению"] > img,
-#multimoderation > form a[title="Перейти к сообщению"] > img {
-  display: none;
-}
-.post_body a[title="Перейти к сообщению"]:after,
-#multimoderation > form a[title="Перейти к сообщению"]:after {
-  content: '«';
-  display: inline-block;
-  position: relative;
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
-  line-height: 1rem;
-  text-align: center;
-  color: #a3bfe4;
-}
 .post_body table[id*="ipb-attach"] *,
 #multimoderation > form table[id*="ipb-attach"] * {
   display: inline-block;
@@ -1001,6 +976,34 @@ span[style*="font-size:8pt"] * {
   font-weight: bold;
   color: #8c8c8c;
   text-align: left;
+}
+#topic .post_body a[title="Перейти к сообщению"],
+#multimoderation > form a[title="Перейти к сообщению"],
+#thread_form .msg-content a[title="Перейти к сообщению"] {
+  display: inline-block;
+  margin: 0;
+  padding: 0 0.25em;
+  text-decoration: none;
+}
+#topic .post_body a[title="Перейти к сообщению"] > img,
+#multimoderation > form a[title="Перейти к сообщению"] > img,
+#thread_form .msg-content a[title="Перейти к сообщению"] > img {
+  display: none;
+}
+#topic .post_body a[title="Перейти к сообщению"]:after,
+#multimoderation > form a[title="Перейти к сообщению"]:after,
+#thread_form .msg-content a[title="Перейти к сообщению"]:after {
+  content: '«';
+  display: inline-block;
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1rem;
+  text-align: center;
+  color: #a3bfe4;
 }
 div[data-post] > a {
   position: absolute;
@@ -1285,15 +1288,14 @@ div[data-post] > a {
 }
 #thread_form .list-group-item .time .read-status.unread.big-dot,
 #qms .list-group-item .time .read-status.unread.big-dot {
-  position: absolute;
-  margin-top: 1rem;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #191919;
-  opacity: 0.5;
-  z-index: 99;
+  position: relative;
+  display: inline-block;
+  margin-top: -0.125em;
+  width: 0.5rem;
+  height: 0.5rem;
+  vertical-align: middle;
+  border-radius: 100%;
+  background: #b53;
 }
 #thread_form .list-group-item .avatar-wrap,
 #qms .list-group-item .avatar-wrap {
@@ -1338,9 +1340,7 @@ div[data-post] > a {
   display: none;
 }
 #thread_form .list-group-item strong,
-#qms .list-group-item strong {
-  display: none;
-}
+#qms .list-group-item strong,
 #thread_form .list-group-item strong + br,
 #qms .list-group-item strong + br {
   display: none;
@@ -1354,6 +1354,8 @@ div[data-post] > a {
   margin: 0 2rem 0 0.5rem;
   background: #2d2d2d;
   border-radius: 0.5rem;
+  -webkit-transition: ease 0.3s background;
+  transition: ease 0.3s background;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.2);
 }
@@ -1378,9 +1380,12 @@ div[data-post] > a {
   left: -0.5rem;
   box-sizing: border-box;
   border: 0.5rem solid;
-  border-color: #2d2d2d;
+  border-color: #212121;
   border-bottom-color: transparent;
   border-left-color: transparent;
+  border-right-color: transparent;
+  -webkit-transition: ease 0.3s border-color;
+  transition: ease 0.3s border-color;
 }
 #thread_form .list-group-item.our-message,
 #qms .list-group-item.our-message {
@@ -1416,11 +1421,57 @@ div[data-post] > a {
   right: -0.5rem;
   border-color: #2d2d2d;
   border-bottom-color: transparent;
+  border-left-color: transparent;
   border-right-color: transparent;
 }
 #thread_form .list-group-item.our-message .msg-content .quote,
 #qms .list-group-item.our-message .msg-content .quote {
   background: rgba(50, 59, 64, 0.8);
+}
+#thread_form .list-group-item.selected .msg-content,
+#qms .list-group-item.selected .msg-content {
+  background: #515964;
+}
+#thread_form .list-group-item.selected .msg-content:before,
+#qms .list-group-item.selected .msg-content:before {
+  border-top-color: #515964;
+}
+#thread_form .list-group-item.msgbox.info,
+#qms .list-group-item.msgbox.info {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: -2rem 0 0 -9rem;
+  padding: 1rem;
+  width: 16rem;
+  border-radius: 0.25rem;
+  z-index: 99;
+  background: #173d17;
+  -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+#thread_form .list-group-item.msgbox.info .icon-close,
+#qms .list-group-item.msgbox.info .icon-close {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+#thread_form .list-group-item.msgbox.info .icon-close:before,
+#qms .list-group-item.msgbox.info .icon-close:before {
+  margin: 0 0.75rem -0.1em 0;
+  font-size: 2rem;
+  color: green;
+}
+@media screen and (max-width: 19rem) {
+  #thread_form .list-group-item.msgbox.info,
+  #qms .list-group-item.msgbox.info {
+    width: auto;
+    margin: 0;
+    left: 1rem;
+    right: 1rem;
+  }
 }
 #thread_form .list-group-item + .list-group-item,
 #qms .list-group-item + .list-group-item {
