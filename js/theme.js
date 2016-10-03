@@ -9,15 +9,19 @@ function numberingCodeLines() {
 	for (var i = 0; i < codeBlockAll.length; i++) {
 		var codeBlock = codeBlockAll[i];
 		var breaks = codeBlock.querySelectorAll('br');
-		var numBlock = document.createElement('div');
-		numBlock.className = "numbering";
-		numBlock.style.display = "none";
-		for (var j = 1; j < breaks.length + 2; j++) {
-			var txt = document.createTextNode(j + "\n");
-			numBlock.appendChild(txt);
+		
+		var newCode = codeBlock.innerHTML.split('<br>');
+		codeBlock.innerHTML = '';
+		
+		for (var j = 0; j < newCode.length; j++) {
+			var codeLine = document.createElement('div');
+			codeLine.className = 'line';
+			codeLine.innerHTML = newCode[j];
+			codeBlock.appendChild(codeLine);
+			codeLine.insertAdjacentHTML("afterBegin",'<span class="num">'+ (j+1) +'</span>');
 		}
-		codeBlock.parentNode.appendChild(numBlock);
 	}
+
 
 /*	var codeTitle = document.querySelectorAll('.code > .block-title');
 	for (var i = 0; i < codeBlockAll.length; i++) {
@@ -112,8 +116,8 @@ function getAttaches() {
 	return jsonArr;
 }
 window.onload = function() {
-	HTMLOUT.sendPostsAttaches(JSON.stringify(getAttaches()))
-}
+	HTMLOUT.sendPostsAttaches(JSON.stringify(getAttaches()));
+};
 
 /**
  *	===========
@@ -147,7 +151,7 @@ function kek(postId, logined) {
 				};
 			}
 		}
-	}
+	};
 }
 
 /**
@@ -261,7 +265,7 @@ function getIds() {
 			}
 		}
 	}
-	HTMLOUT.showCuratorDialog(result.join())
+	HTMLOUT.showCuratorDialog(result.join());
 }
 
 function invertCheckboxes() {
