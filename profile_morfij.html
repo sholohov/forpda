@@ -1,20 +1,23 @@
 <!doctype html>
 <html>
 
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-		<link rel="stylesheet" type="text/css" href="fonts/roboto/import.css">
-		<link rel="stylesheet" type="text/css" href="fonts/flaticons/import.css">
-		<link rel="stylesheet" type="text/css" href="fonts/fontello/import.css">
-	<script type="text/javascript" src="../z_forum_helpers.js"></script>
-	<script type="text/javascript" src="js/theme.js"></script>
-	<script type="text/javascript" src="js/blockeditor.js"></script>
-	<script type="text/javascript" src="js/z_emoticons.js"></script>
-	<title>Морфий</title>
-</head>
-<body id="profile" class="modification ongpuimg" style="font-family:inherit;">
-	<script type="text/javascript" src="../less-dev.js"></script>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="/fonts/roboto/import.css">
+		<link rel="stylesheet" type="text/css" href="/fonts/flaticons/import.css">
+		<link rel="stylesheet" type="text/css" href="/fonts/fontello/import.css">
+		<link rel="stylesheet" type="text/css" href="/styles/page_rewind.css">
+		<link rel="stylesheet" type="text/css" href="/styles/material_light.css">
+		<script type="text/javascript" src="/js/z_forum_helpers.js"></script>
+		<script type="text/javascript" src="/js/theme.js"></script>
+		<script type="text/javascript" src="/js/blockeditor.js"></script>
+		<script type="text/javascript" src="/js/z_emoticons.js"></script>
+		<title>Профиль</title>
+	</head>
+
+	<body id="profile" class="modification" style="font-family:inherit;">
+		<script type="text/javascript" src="/js/less-dev.js"></script>
 		<div class="user-profile-list">
 			<li id="rBg2oEz1Eoq69qL6Gn7wud8YrnPclJD1m2lLX">
 				<div class="user-box">
@@ -147,10 +150,10 @@
 							<li><span class="title">Карма:</span>
 								<div class="area">
 									<a href="#" title="Если Карма:
-Выше минус 10 — никаких ограничений.
-Минус 10 и ниже — нет возможности менять рейтинг, доступно написание не более 5 комментариев в сутки.
-Минус 15 и ниже — нет возможности менять рейтинг, доступно написание не более 1 комментария в сутки.
-Минус 17 и ниже — нет возможности менять рейтинг, написание комментариев больше недоступно.">0</a>
+										Выше минус 10 — никаких ограничений.
+										Минус 10 и ниже — нет возможности менять рейтинг, доступно написание не более 5 комментариев в сутки.
+										Минус 15 и ниже — нет возможности менять рейтинг, доступно написание не более 1 комментария в сутки.
+										Минус 17 и ниже — нет возможности менять рейтинг, написание комментариев больше недоступно.">0</a>
 								</div>
 							</li>
 							<li><span class="title">Постов:</span>
@@ -230,7 +233,7 @@
 				</div>
 				<div>
 					<textarea class="profile-textarea" style="height: auto;" rows="15" placeholder="Это ваш персональный блокнот.
-Здесь Вы можете хранить отрывки сообщений или любую другую информацию, которая для Вас важна" id="rBg2oEz1Eoz2Dr51QAQPd8oL0z1Otf77UslPrO" maxlength="65535">[url]http://4pda.ru/forum/index.php?s=&amp;showtopic=300717&amp;view=findpost&amp;p=17038351[/url] - regpon wifi&lt;br /&gt;&lt;br /&gt;</textarea>
+						Здесь Вы можете хранить отрывки сообщений или любую другую информацию, которая для Вас важна" id="rBg2oEz1Eoz2Dr51QAQPd8oL0z1Otf77UslPrO" maxlength="65535">[url]http://4pda.ru/forum/index.php?s=&amp;showtopic=300717&amp;view=findpost&amp;p=17038351[/url] - regpon wifi&lt;br /&gt;&lt;br /&gt;</textarea>
 				</div> <br>
 				<div class="profile-edit-links">
 					<div class="col">
@@ -240,57 +243,57 @@
 						<a href="#" id="rQ8ZE7QDQgulViyIUTUez0UEFRPRbWz0xgOUA5UthGn" class="btn">Сохранить</a>
 					</div>
 				</div>
-				<script type="text/javascript">
-					<!--
-					$4.onInit("jQuery", function($) {
-						var $txt = $("#rBg2oEz1Eoz2Dr51QAQPd8oL0z1Otf77UslPrO"),
-							$save = $("#rQ8ZE7QDQgulViyIUTUez0UEFRPRbWz0xgOUA5UthGn"),
-							tmr = 0,
-							tmp = $("<div/>"),
-							prevSave = "";
+<script type="text/javascript">
+<!--
+$4.onInit("jQuery", function($) {
+			  var $txt = $("#rBg2oEz1Eoz2Dr51QAQPd8oL0z1Otf77UslPrO"),
+				  $save = $("#rQ8ZE7QDQgulViyIUTUez0UEFRPRbWz0xgOUA5UthGn"),
+				  tmr = 0,
+				  tmp = $("<div/>"),
+				  prevSave = "";
 
-						function doSave() {
-							if (prevSave == $txt.val())
-								return;
-							prevSave = $txt.val();
-							$.post("http://4pda.ru/forum/index.php?act=profile-xhr&action=save-note", {
-								"note": prevSave
-							});
-						}
-						$save.click(function(ev) {
-							ev.preventDefault();
-							prevSave = "";
-							doSave();
-						});
-						$txt.on("change keyup", function() {
-							if ($txt[0].clientHeight < $txt[0].scrollHeight)
-								$txt.height($txt[0].scrollHeight);
-							clearTimeout(tmr);
-							tmr = setTimeout(doSave, 2000)
-						});
-						prevSave = $txt.val();
-						$txt.change();
-					});
-					//-->
-				</script>
+			  function doSave() {
+				  if (prevSave == $txt.val())
+					  return;
+				  prevSave = $txt.val();
+				  $.post("http://4pda.ru/forum/index.php?act=profile-xhr&action=save-note", {
+							 "note": prevSave
+						 });
+			  }
+			  $save.click(function(ev) {
+							  ev.preventDefault();
+							  prevSave = "";
+							  doSave();
+						  });
+			  $txt.on("change keyup", function() {
+						  if ($txt[0].clientHeight < $txt[0].scrollHeight)
+							  $txt.height($txt[0].scrollHeight);
+						  clearTimeout(tmr);
+						  tmr = setTimeout(doSave, 2000)
+					  });
+			  prevSave = $txt.val();
+			  $txt.change();
+		  });
+//-->
+</script>
 			</li>
 			<li class="margin-block">&nbsp;</li>
 			<li class="margin-block">&nbsp;</li>
 		</div>
-		<script>
-			(function() {
-				var trans = document.querySelectorAll("input[type=radio]")
-				for (var i = 0, len = trans.length; i < len; i++) {
-					trans[i].onchange = function() {
-						window.HTMLOUT.setPrimaryDevice(this.value)
-					};
-				}
-			}());
-		</script>
-		<script>
-			jsEmoticons.parseAll('forum/style_emoticons/default/');
-			initPostBlock();
-		</script>
+<script>
+(function() {
+	var trans = document.querySelectorAll("input[type=radio]")
+	for (var i = 0, len = trans.length; i < len; i++) {
+		trans[i].onchange = function() {
+			window.HTMLOUT.setPrimaryDevice(this.value)
+		};
+	}
+}());
+</script>
+<script>
+jsEmoticons.parseAll('forum/style_emoticons/default/');
+initPostBlock();
+</script>
 		<script type="text/javascript" src="../dev/toolbar.js"></script>
 	</body>
 </html>
