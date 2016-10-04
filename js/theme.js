@@ -3,49 +3,73 @@
  *		code lines numbering
  *		====================
  */
- 
-function numberingCodeLines() {
-	var codeBlockAll = document.querySelectorAll('.code > .block-body');
-	for (var i = 0; i < codeBlockAll.length; i++) {
-		var codeBlock = codeBlockAll[i];
+
+function numberingCodeLines(ws) {
+	var codeBody = document.querySelectorAll('.code > .block-body');
+	var codeTitle = document.querySelectorAll('.code > .block-title');
+
+	for (var i = 0; i < codeBody.length; i++) {
+		var codeBlock = codeBody[i];
 		var breaks = codeBlock.querySelectorAll('br');
+
+		function wrap() {
+			if (codeBlock.parentNode.querySelector('.line')) return;
+			codeBlock.style.whiteSpace = 'pre-wrap';
+			var newCode = codeBlock.innerHTML.split('<br>');
+			codeBlock.innerHTML = '';
+
+			for (var j = 0; j < newCode.length; j++) {
+				var codeLine = document.createElement('div');
+				codeLine.className = 'line';
+				codeLine.innerHTML = newCode[j];
+				codeBlock.appendChild(codeLine);
+				codeLine.insertAdjacentHTML("afterBegin", '<span class="num-wrap">' + (j + 1) + '</span>');
+			}
+			if (codeBlock.parentNode.querySelector('.toggle-btn')) return;
+			codeTitle[i].insertAdjacentHTML("afterEnd", '<span class="toggle-btn wrap" onclick="codeTitleBtn(this)"><span>PRE\\WRAP</span></span>');
+		}
+
+		function pre() {
+			if (codeBlock.parentNode.querySelector('.num-pre')) return;
+			var numWrapAll = document.querySelectorAll('.code > .block-body num-wrap');
+			for (var k = 0; k < numWrapAll.length; k++) {
+				document.body.removeChild(numWrapAll[i]);
+			}
+			codeBlock.style.whiteSpace = 'pre';
+			var numBlock = document.createElement('div');
+			numBlock.className = "num-pre";
+			for (var j = 1; j < breaks.length + 2; j++) {
+				var txt = document.createTextNode(j + "\n");
+				numBlock.appendChild(txt);
+			}
+			codeBlock.parentNode.appendChild(numBlock);
+		}
+
+		switch (ws) {
+			case 'wrap': wrap();
+				break;
+			case 'pre': pre();
+				break;
+		}
+
+		// toggle wrap
 		
-		var newCode = codeBlock.innerHTML.split('<br>');
-		codeBlock.innerHTML = '';
-		
-		for (var j = 0; j < newCode.length; j++) {
-			var codeLine = document.createElement('div');
-			codeLine.className = 'line';
-			codeLine.innerHTML = newCode[j];
-			codeBlock.appendChild(codeLine);
-			codeLine.insertAdjacentHTML("afterBegin",'<span class="num">'+ (j+1) +'</span>');
+		function codeTitleBtn(el) {
+			if (el.classList.contains('wrap')) {
+				el.classList.remove('wrap');
+				el.classList.add('pre');
+				numberingCodeLines('pre');
+
+			} else {
+				el.classList.remove('pre');
+				el.classList.add('wrap');
+				numberingCodeLines('wrap');
+			}
 		}
 	}
-
-
-/*	var codeTitle = document.querySelectorAll('.code > .block-title');
-	for (var i = 0; i < codeBlockAll.length; i++) {
-		codeTitle[i].insertAdjacentHTML("beforeEnd",'<span class="numbering_btn"> | Нумерация</span>');
-		codeTitle[i].addEventListener("click", function(e) {
-			
-		});
-	}*/
 }
-document.addEventListener('DOMContentLoaded', numberingCodeLines);
 
-/*function numberingCodeLines() {
- var codeBlockAll = document.querySelectorAll('.code > .block-body');
- for (var i = 0; i < codeBlockAll.length; i++) {
- var codeBlock = codeBlockAll[i];
- var breaks = codeBlock.querySelectorAll('br');
- for (var j = 0; j < breaks.length-1; j++) {
- breaks[j].insertAdjacentHTML("afterEnd",'<span class="numbering">'+(j+2)+'</span>');
- }
- codeBlock.insertAdjacentHTML("afterBegin",'<span class="numbering">1</span>');
- }
- }
- document.addEventListener('DOMContentLoaded', numberingCodeLines);*/
-
+document.addEventListener('DOMContentLoaded', function() { numberingCodeLines('wrap');});
 
 /**
  *		======================

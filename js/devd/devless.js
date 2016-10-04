@@ -7,9 +7,8 @@
 	tabs.append('<button class="btn" data-tab="less">L</button><button class="btn" data-tab="edit">E</button>');
 	content.append('<div data-tab-name="less">\
 	<h1>CSS/LESS</h1>\
-' + (window["DEVOUT"] && window["DEVOUT"]["showChooseCssDialog"] ? '<input type="hidden" id="dev-less-file-path"><button class="btn" id="dev-less-file-compile">Выбрать \\ Показать стиль</button>' : '<input type="file" id="dev-less-file-select"/> <button class="btn" id="dev-less-file-compile">Применить</button>') + '\
-<br /><br /><button id="dev-less-show" class="btn" data-toggle="hide-element" data-target="#dev-less-out"  disabled="disabled">Итоговый код</button> \
-<button id="dev-copy-css" class="btn">Копировать Код</button>\
+' + (window["DEVOUT"] && window["DEVOUT"]["showChooseCssDialog"] ? '<input type="hidden" id="dev-less-file-path"><button class="btn" id="dev-less-file-compile">Выбрать стиль</button>' : '<input type="file" id="dev-less-file-select"/> <button class="btn" id="dev-less-file-compile">Применить</button>') + '\
+<br /><br /><button id="dev-less-show" class="btn" data-toggle="hide-element" data-target="#dev-less-out"  disabled="disabled">Показать/скрыть итоговый код</button> \
 <textarea id="dev-less-out" style="width:100%; margin-right:10px;" class="hide-element" rows="6" readonly="readonly"></textarea> \
 <pre id="dev-less-error" style="display:block; background:#fff; color:red!important;"></pre>\
 </div>\
@@ -19,16 +18,6 @@
 	<button id="dev-less-edit-compile" class="btn">Применить изменения</button><br />\
 </div>');
 	$('head').append(styleElement);
-	
-		var copyCssBtn = document.querySelector('#dev-copy-css');
-	copyCssBtn.addEventListener('click', function() {
-		var txt = document.querySelector('#dev-less-out');
-		if (txt.value != '') {
-			DEVOUT.copyPast(txt.value);
-		} else {
-			alert('Нечего сохранять...');
-		}
-	});
 
 	function parseLess(str) {
 		less.render(

@@ -121,7 +121,10 @@ body.onclick = function(event) {
 		event = event || window.event;
 		var target = event.target || event.srcElement;
 		while (target != this) {
-				if (target.nodeName == 'A') return false;
+				if (target.nodeName == 'A') {
+//					alert(target.href);
+//					return false;
+				}
 				target = target.parentNode;
 		}
 };
