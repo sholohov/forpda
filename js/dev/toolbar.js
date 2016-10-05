@@ -17,9 +17,9 @@ devToolBarStyle.innerHTML = 'body {\
 #dev_toolbar .button {\
 	display: inline-block;\
 	color: white;\
-	font-size: 1rem;\
-	line-height: 1.4em;\
-	padding: 0.25rem 0.5rem;\
+	font-size: 16px;\
+	line-height: 1.4;\
+	padding: 4px 8px;\
 	vertical-align: middle;\
 	border-right: 1px solid white;\
 }\
@@ -62,10 +62,10 @@ function toolBarHide() {
 		toolBarHideButton.style.cssText = "position:fixed;\
 		right:0;\
 		bottom:0;\
-		width: 2rem;\
-		height: 2rem;\
-		font-size: 1rem;\
-		line-height:2rem;\
+		width: 32px;\
+		height: 32px;\
+		font-size: 16px;\
+		line-height: 32px;\
 		font-weight: bold;\
 		text-align: center;\
 		outline: 1px solid white;\
@@ -117,7 +117,7 @@ showOutlineElements();
 // LINK OFF
 //
 
-body.onclick = function(event) {
+/*body.onclick = function(event) {
 		event = event || window.event;
 		var target = event.target || event.srcElement;
 		while (target != this) {
@@ -125,6 +125,7 @@ body.onclick = function(event) {
 				target = target.parentNode;
 		}
 };
+*/
 
 //
 // SWITCH FOR IMAGES

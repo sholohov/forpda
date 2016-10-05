@@ -172,10 +172,17 @@ HTML{
 		}
 		.toggle-btn {
 			position: absolute;
+			padding: 0.5rem;
 			right: 0;
+			top: 0;
+			cursor: pointer;
+			span {
+				font-weight: bold;
+				color: @linkColor;
+			}
 		}
 		>.block-title {
-			margin: 0 5rem 0 0;
+			margin: 0 3rem 0 0;
 			padding: 0.5rem;
 			color: saturate(mix(@bg-code, @color, 50%),50%);
 			&:before {
