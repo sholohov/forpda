@@ -160,10 +160,8 @@ HTML{
 			color: mix(@color, @bgColor, 50%);
 			-webkit-user-select: none;
 		}
-		.line {
-			.num-wrap {
-				left: 0
-			}
+		.num-wrap {
+			left: 0
 		}
 		.num-pre {
 			left: 0;
@@ -191,16 +189,15 @@ HTML{
 		}
 		>.block-body {
 			padding: 0;
+			margin-left: 2.5rem;
 			overflow-x: auto;
 			font-family: 'roboto mono';
 			font-size: 1rem;
 			line-height: @codeLineHeight;
-			word-break: normal;
 			-webkit-tab-size: 4;
 			tab-size: 4;
 			color: mix(@color, @bg-code, 80%);
-			border-left: 2.5rem solid @bgColor;
-			background: linear-gradient(transparent @codeLineHeight, mix(@color, @bgColor, 5%) @codeLineHeight);
+			background: linear-gradient(rgba(130,130,130,0.1) @codeLineHeight, transparent @codeLineHeight);
 			background-size: @codeLineHeight * 2 @codeLineHeight * 2;
 		}
 		&.box {

@@ -3,21 +3,18 @@
  *		code lines numbering
  *		====================
  */
+
 function numberingCodeLines(ws) {
 	var codeBlockAll = document.querySelectorAll('.post-block.code');
-
 	for (var i = 0; i < codeBlockAll.length; i++) {
 		var codeBlock = codeBlockAll[i];
 		var codeTitle = codeBlock.querySelector('.block-title');
 		var codeBody = codeBlock.querySelector('.block-body');
-		var breaks = codeBody.querySelectorAll('br');
-
 		function wrap() {
-			if (codeBlock.querySelector('.line')) return;
-			codeBody.style.whiteSpace = 'pre-wrap';
+			if (codeBlock.querySelector('.num-wrap')) return;
+			codeBody.style.cssText = 'word-break:break-word;white-space:pre-wrap';
 			var newCode = codeBody.innerHTML.split('<br>');
 			codeBody.innerHTML = '';
-
 			for (var j = 0; j < newCode.length; j++) {
 				var codeLine = document.createElement('div');
 				codeLine.className = 'line';
@@ -26,41 +23,32 @@ function numberingCodeLines(ws) {
 				codeLine.insertAdjacentHTML("afterBegin", '<span class="num-wrap">' + (j + 1) + '</span>');
 			}
 		}
-
 		function pre() {
 			if (codeBlock.querySelector('.num-pre')) return;
+			codeBody.style.cssText = 'word-break:normal;white-space:pre';
 			var numWrapAll = codeBody.querySelectorAll('.num-wrap');
-			codeBody.style.whiteSpace = 'pre';
 			var numBlock = document.createElement('div');
 			numBlock.className = "num-pre";
 			for (var j = 1; j < numWrapAll.length + 1; j++) {
 				var txt = document.createTextNode(j + "\n");
 				numBlock.appendChild(txt);
-				numWrapAll[j-1].parentNode.removeChild(numWrapAll[j-1]);
+				numWrapAll[j - 1].remove();
 			}
 			codeBlock.appendChild(numBlock);
 		}
-
 		switch (ws) {
-			case 'wrap': wrap();
-				break;
-			case 'pre': pre();
-				break;
+			case 'wrap': wrap(); break;
+			case 'pre' : pre();
 		}
-
-		// toggle wrap
-
-		if (!codeBlock.querySelector('.toggle-btn')) {
-			codeTitle.insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span>');
-		}			
-		codeBlock.querySelector('.toggle-btn').addEventListener('click', codeTitleAllBtn);
-		function codeTitleAllBtn(e) {
-			numberingCodeLines('pre');
-		}
+		if (!codeBlock.querySelector('.toggle-btn')) codeTitle.insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span>');			
+		codeBlock.querySelector('.toggle-btn').addEventListener('click', function() { numberingCodeLines('pre'); });
 	}
 }
 
-document.addEventListener('DOMContentLoaded', function() { numberingCodeLines('wrap');});
+document.addEventListener('DOMContentLoaded', numberingCodeLinesFoo);
+function numberingCodeLinesFoo() {
+	numberingCodeLines('wrap');
+}
 
 /**
  *		======================
@@ -145,27 +133,8 @@ document.addEventListener('DOMContentLoaded', locationReload);
 function locationReload() {
 	var pageUrl = document.querySelector(".topic_title_post > A").href;
 	var cutHashUrl = pageUrl.match(/.+st=\d+/g);
-	document.onkeydown = function(e) {
+	window.onkeydown = function(e) {
 		if (event.keyCode == 116) window.location.assign(cutHashUrl);
-	};
-}
-
-function kek(postId, logined) {
-	window.onload = function() {
-		var anchors = document.querySelectorAll('.karma');
-		var data = JSON.parse(getCommentsData())[postId];
-		for (var i = 0; i < anchors.length; i++) {
-			var found = anchors[i].getAttribute("data-karma").match(/([\d]*)-([\d]*)/);
-			anchors[i].innerHTML = '<b class="icon-karma-up" title="Мне нравится" data-karma-act="1-264127-2745153"></b><span class="num-wrap"><span class="num" title="Понравилось"></span></span>';
-			anchors[i].querySelector(".num-wrap .num").innerHTML = data[found[2]][3];
-			if (logined) {
-				anchors[i].onclick = function() {
-					found = this.getAttribute("data-karma").match(/([\d]*)-([\d]*)/);
-					this.querySelector(".num-wrap .num").innerHTML = data[found[2]][3] + 1;
-					HTMLOUT.likeComment(found[1], found[2]);
-				};
-			}
-		}
 	};
 }
 
@@ -223,7 +192,7 @@ window.addEventListener("load", function() {
 								var pageList = panel.querySelector('.pages');
 								var activePage = pageList.querySelector('b');
 
-								pageList.scrollTop = (activePage.offsetTop - activePage.parentNode.offsetTop)
+								pageList.scrollTop = (activePage.offsetTop - activePage.parentNode.offsetTop);
 							}
 						});
 
@@ -268,6 +237,25 @@ function checkedQmsMessage() {
  *		END
  *		===
  */
+
+function kek(postId, logined) {
+	window.onload = function() {
+		var anchors = document.querySelectorAll('.karma');
+		var data = JSON.parse(getCommentsData())[postId];
+		for (var i = 0; i < anchors.length; i++) {
+			var found = anchors[i].getAttribute("data-karma").match(/([\d]*)-([\d]*)/);
+			anchors[i].innerHTML = '<b class="icon-karma-up" title="Мне нравится" data-karma-act="1-264127-2745153"></b><span class="num-wrap"><span class="num" title="Понравилось"></span></span>';
+			anchors[i].querySelector(".num-wrap .num").innerHTML = data[found[2]][3];
+			if (logined) {
+				anchors[i].onclick = function() {
+					found = this.getAttribute("data-karma").match(/([\d]*)-([\d]*)/);
+					this.querySelector(".num-wrap .num").innerHTML = data[found[2]][3] + 1;
+					HTMLOUT.likeComment(found[1], found[2]);
+				};
+			}
+		}
+	};
+}
 
 function getIds() {
 	var p = document.documentElement ? document.documentElement : document.body;
