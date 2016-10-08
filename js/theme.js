@@ -14,6 +14,7 @@ function numberingCodeLines(ws) {
 			if (codeBlock.querySelector('.num-wrap')) return;
 			codeBody.style.cssText = 'word-break:break-word;white-space:pre-wrap';
 			var newCode = codeBody.innerHTML.split('<br>');
+			while (~newCode[newCode.length-1].search( /^\s*$/gi ) ) newCode.pop();
 			codeBody.innerHTML = '';
 			for (var j = 0; j < newCode.length; j++) {
 				var codeLine = document.createElement('div');

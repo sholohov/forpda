@@ -6,9 +6,9 @@
 
 //                                ---- COLOR ----
 
-		@import 'styles/material_light';
+//		@import 'styles/material_light';
 //		@import 'styles/material_dark';
-//		@import 'styles/material_black';
+		@import 'styles/material_black';
 
 @width:					50rem;
 @widthPoll:				30rem;
@@ -107,7 +107,7 @@ HTML{
 			font-weight: bold;
 			font-style: italic;
 		}
-		>.block-body{
+		> .block-body{
 			margin-top: 0.5rem;
 		}
 	}
@@ -145,8 +145,8 @@ HTML{
 		position: relative;
 		padding: 0;
 		margin: 0;
-		border-radius: 0;
 		overflow: hidden;
+		background: mix(@bg-code, @bgColor, 40%);
 		.num-wrap,
 		.num-pre {
 			position: absolute;
@@ -157,7 +157,7 @@ HTML{
 			font-size: 14*@rem;
 			line-height: @codeLineHeight;
 			white-space: pre;
-			color: mix(@color, @bgColor, 50%);
+			color: saturate(mix(@bg-code, @color, 70%),30%);
 			-webkit-user-select: none;
 		}
 		.num-wrap {
@@ -165,7 +165,7 @@ HTML{
 		}
 		.num-pre {
 			left: 0;
-			top: 2.75rem;
+			top: 2.5rem - 0.0625;
 			bottom: 0;
 		}
 		.toggle-btn {
@@ -175,21 +175,30 @@ HTML{
 			top: 0;
 			cursor: pointer;
 			span {
+				display: none;
 				font-weight: bold;
-				color: @linkColor;
+				color: saturate(mix(@bg-code, @color, 50%),50%);
+			}
+			&:before {
+				content:'';
+				display: block;
+				width: 1.5rem;
+				height: 1.5rem;
+				background: url(material_src/wrap_text.svg), url(../material_src/wrap_text.svg) center no-repeat;
+				background-size: 1.5rem;
 			}
 		}
 		>.block-title {
 			margin: 0 3rem 0 0;
-			padding: 0.5rem;
+			padding: 0.5rem 0.5rem 0.75rem 0.625rem;
 			color: saturate(mix(@bg-code, @color, 50%),50%);
 			&:before {
-				content:'КОД';
+				content:'Код';
 			}
 		}
 		>.block-body {
 			padding: 0;
-			margin-left: 2.5rem;
+			margin: 0 0.5rem 0.5rem 2.5rem;
 			overflow-x: auto;
 			font-family: 'roboto mono';
 			font-size: 1rem;
@@ -197,24 +206,24 @@ HTML{
 			-webkit-tab-size: 4;
 			tab-size: 4;
 			color: mix(@color, @bg-code, 80%);
-			background: linear-gradient(rgba(130,130,130,0.1) @codeLineHeight, transparent @codeLineHeight);
+			background: linear-gradient(mix(mix(@bg-code, @bgColor, 40%),@color,97%) @codeLineHeight, transparent @codeLineHeight);
 			background-size: @codeLineHeight * 2 @codeLineHeight * 2;
 		}
 		&.box {
 			> .block-title {
 				&:before {
-					content:'КОД Развернуть';
+					content:'Развернуть Код';
 				}
 			}
 			> .block-body {
-				max-height: 9.75rem - 0.125;
+				max-height: 9.5rem;
 				overflow: hidden;
 			}
 		}
 		&.unbox {
 			> .block-title {
 				&:before {
-					content:'КОД Свернуть';
+					content:'Свернуть Код';
 				}
 			}
 		}
@@ -971,7 +980,7 @@ HTML{
 				height: 1.5rem;
 				margin-right: 0.3rem;
 				content:'';
-				background-image: url(material_src/attach.svg);
+				background-image: url(material_src/attach.svg), url(../material_src/attach.svg);
 				background-repeat: no-repeat;
 				background-size: 1.5rem;
 				vertical-align: middle;
@@ -3186,6 +3195,9 @@ div[data-post] {
 	}
 	.post_body {
 		padding-bottom: 0.75rem;
+		@media screen and (min-width: (@width)) {
+			min-height: 9rem;
+		}
 	}
 }
 

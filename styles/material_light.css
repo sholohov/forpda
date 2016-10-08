@@ -159,8 +159,8 @@ span[style*="font-size:8pt"] * {
   position: relative;
   padding: 0;
   margin: 0;
-  border-radius: 0;
   overflow: hidden;
+  background: rgba(255, 247, 220, 0.8);
 }
 .post-block.code .num-wrap,
 .post-block.code .num-pre {
@@ -172,7 +172,7 @@ span[style*="font-size:8pt"] * {
   font-size: 0.875rem;
   line-height: 1.375rem;
   white-space: pre;
-  color: #808080;
+  color: rgba(132, 103, 6, 0.65);
   -webkit-user-select: none;
 }
 .post-block.code .num-wrap {
@@ -180,7 +180,7 @@ span[style*="font-size:8pt"] * {
 }
 .post-block.code .num-pre {
   left: 0;
-  top: 2.75rem;
+  top: 2.4375rem;
   bottom: 0;
 }
 .post-block.code .toggle-btn {
@@ -191,39 +191,48 @@ span[style*="font-size:8pt"] * {
   cursor: pointer;
 }
 .post-block.code .toggle-btn span {
+  display: none;
   font-weight: bold;
-  color: #3490c3;
+  color: rgba(79, 61, 0, 0.75);
+}
+.post-block.code .toggle-btn:before {
+  content: '';
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: url(material_src/wrap_text.svg), url(../material_src/wrap_text.svg) center no-repeat;
+  background-size: 1.5rem;
 }
 .post-block.code > .block-title {
   margin: 0 3rem 0 0;
-  padding: 0.5rem;
-  color: rgba(50, 38, 0, 0.75);
+  padding: 0.5rem 0.5rem 0.75rem 0.625rem;
+  color: rgba(79, 61, 0, 0.75);
 }
 .post-block.code > .block-title:before {
-  content: 'КОД';
+  content: 'Код';
 }
 .post-block.code > .block-body {
   padding: 0;
-  margin-left: 2.5rem;
+  margin: 0 0.5rem 0.5rem 2.5rem;
   overflow-x: auto;
   font-family: 'roboto mono';
   font-size: 1rem;
   line-height: 1.375rem;
   -webkit-tab-size: 4;
   tab-size: 4;
-  color: rgba(15, 12, 0, 0.9);
-  background: linear-gradient(rgba(130, 130, 130, 0.1) 1.375rem, transparent 1.375rem);
+  color: rgba(20, 16, 5, 0.9);
+  background: linear-gradient(rgba(244, 236, 210, 0.806) 1.375rem, transparent 1.375rem);
   background-size: 2.75rem 2.75rem;
 }
 .post-block.code.box > .block-title:before {
-  content: 'КОД Развернуть';
+  content: 'Развернуть Код';
 }
 .post-block.code.box > .block-body {
-  max-height: 9.625rem;
+  max-height: 9.5rem;
   overflow: hidden;
 }
 .post-block.code.unbox > .block-title:before {
-  content: 'КОД Свернуть';
+  content: 'Свернуть Код';
 }
 .post-block.hidden {
   background: rgba(0, 0, 0, 0.05);
@@ -943,7 +952,7 @@ span[style*="font-size:8pt"] * {
   height: 1.5rem;
   margin-right: 0.3rem;
   content: '';
-  background-image: url(material_src/attach.svg);
+  background-image: url(material_src/attach.svg), url(../material_src/attach.svg);
   background-repeat: no-repeat;
   background-size: 1.5rem;
   vertical-align: middle;
@@ -3146,6 +3155,11 @@ div[data-post] > a {
 }
 #curator .post_body {
   padding-bottom: 0.75rem;
+}
+@media screen and (min-width: 50rem) {
+  #curator .post_body {
+    min-height: 9rem;
+  }
 }
 /*
 *	OTHER
