@@ -6,8 +6,8 @@
 
 //                                ---- COLOR ----
 
-//		@import 'styles/material_light';
-		@import 'styles/material_dark';
+		@import 'styles/material_light';
+//		@import 'styles/material_dark';
 //		@import 'styles/material_black';
 
 @width:					50rem;
@@ -45,7 +45,9 @@ HTML{
 		padding: 0.5rem 0 5rem;
 		font-size: 1em;
 		font-weight: 1.4;
+		overflow-wrap: break-word;
 		word-break: break-word;
+		white-space: normal;
 		overflow: auto;
 		color: @color;
 		box-sizing: border-box;
@@ -149,10 +151,10 @@ HTML{
 		.num-wrap,
 		.num-pre {
 			position: absolute;
-			display: block;
 			width: 2rem;
 			padding: 0 0.5rem 0 0;
 			text-align: right;
+			font-family: 'roboto mono';
 			font-size: 14*@rem;
 			line-height: @codeLineHeight;
 			white-space: pre;
@@ -164,8 +166,29 @@ HTML{
 		}
 		.num-pre {
 			left: 0;
-			top: 2.5rem - 0.0625;
+			top: 2.5rem;
 			bottom: 0;
+		}
+		&[wraptext="wrap"] {
+			.num-wrap {
+				dispaly: inline-block;
+			}
+			.num-pre {
+				display: none;
+			}
+		}
+		&[wraptext="pre"] {
+			> .block-body {
+				overflow-wrap: normal;
+				word-break: normal;
+				white-space: pre;
+			}
+			.num-wrap {
+				display: none;
+			}
+			.num-pre {
+				display: block;
+			}
 		}
 		.toggle-btn {
 			position: absolute;
@@ -199,7 +222,7 @@ HTML{
 			padding: 0;
 			margin: 0 0.5rem 0.5rem 2.5rem;
 			overflow-x: auto;
-			font-family: 'roboto mono';
+			white-space: pre-wrap;
 			font-size: 1rem;
 			line-height: @codeLineHeight;
 			-webkit-tab-size: 4;
@@ -247,26 +270,28 @@ HTML{
 		padding: 0;
 		overflow: hidden;
 		box-sizing: border-box;
-		background: mix(@color, @bgColor, 5%);
+		background: rgba(128,128,128,0.1);
+		&:before {
+			position: absolute;
+			left: 0.625rem;
+			top: 14*@rem;
+			font-size: 1em;
+			content:'';
+			height: 0.625em;
+			width: 0.625em;
+			margin: 0 0.75rem 0 0.25rem;
+			box-sizing: border-box;
+			border-top: 0.125em solid;
+			border-left: 0.125em solid;
+			-webkit-transition: 0.3s ease;
+			transition: 0.3s ease;
+		}
 		>.block-title {
-			padding: 0.5rem 0.7rem;
+			padding: 0.5rem 0.75rem 0.5rem 2.25rem;
 			font-style: normal;
 			color: white;
 			font-size: 1rem;
 			overflow: hidden;
-			&:before {
-				display: inline-block;
-				font-size: 1em;
-				content:'';
-				height: 0.625em;
-				width: 0.625em;
-				margin: 0 0.75rem 0 0.25rem;
-				box-sizing: border-box;
-				border-top: 0.125em solid;
-				border-left: 0.125em solid;
-				-webkit-transition: 0.3s ease;
-				transition: 0.3s ease;
-			}
 			&:empty:after {
 				position: relative;
 				display: inline;
@@ -291,34 +316,54 @@ HTML{
 			}
 		}
 		&.close {
+			&:before {
+				-webkit-transform: rotate(-135deg) translate(0.125rem, 0.125rem);
+				transform: rotate(-135deg) translate(0.125rem, 0.125rem);
+				border-top-color: white;
+				border-left-color: white;
+			}
 			> .block-title {
 				background: @spoilColor;
-				&:before {
-					-webkit-transform: rotate(-135deg) translate(0.125rem, 0.125rem);
-					transform: rotate(-135deg) translate(0.125rem, 0.125rem);
-					border-top-color: white;
-					border-left-color: white;
-				}
 			}
 			> .block-body {
 				display: none;
 			}
 		}
 		&.open {
+			&:before {
+				-webkit-transform: rotate(45deg) translate(0.125rem, 0.125rem);
+				transform: rotate(45deg) translate(0.125rem, 0.125rem);
+				border-top-color: mix(@color, @bgColor, 60%);
+				border-left-color: mix(@color, @bgColor, 60%);
+			}
 			.open {
-				border-radius: 0;
-				border-left: 2px solid mix(@color, @bgColor, 20%);
+//				border-radius: 0;
+//				border-left: 2px solid mix(@color, @bgColor, 20%);
+
+				background: @bgColor;
+				.open {
+					background: rgba(128,128,128,0.1);
+					.open {
+						background: @bgColor;
+						.open {
+							background: rgba(128,128,128,0.1);
+							.open {
+								background: @bgColor;
+								.open {
+									background: rgba(128,128,128,0.1);
+									.open {
+										background: @bgColor;
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 			> .block-title {
 				color: mix(@color, @bgColor, 60%);
 //				background: mix(@color, @bgColor, 10%);
 				margin: 0;
-				&:before {
-					-webkit-transform: rotate(45deg) translate(0.125rem, 0.125rem);
-					transform: rotate(45deg) translate(0.125rem, 0.125rem);
-					border-top-color: mix(@color, @bgColor, 60%);
-					border-left-color: mix(@color, @bgColor, 60%);
-				}
 			}
 		}
 	}
@@ -369,6 +414,7 @@ HTML{
 		height: 100%;
 		margin: 0;
 		background: mix(@color, @bgColor, 5%);
+		background: rgba(128,128,128,0.1);
 	}
 }
 
@@ -507,15 +553,15 @@ HTML{
 	.hidetop {
 		padding: 0.5rem 0;
 		B:before {
-			&:extend(.post-block.spoil > .block-title:before);
+			&:extend(.post-block.spoil:before);
 		}
 		&.close B:before {
-			&:extend(.post-block.spoil.close > .block-title:before);
+			&:extend(.post-block.spoil.close:before);
 			border-top-color: mix(@color, @bgColor, 60%);
 			border-left-color: mix(@color, @bgColor, 60%);
 		}
 		&.open B:before {
-			&:extend(.post-block.spoil.open > .block-title:before);
+			&:extend(.post-block.spoil.open:before);
 		}
 		B:after {
 			content: "ОПРОС";
