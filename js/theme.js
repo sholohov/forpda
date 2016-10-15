@@ -12,7 +12,7 @@ function numberingCodeLinesFoo() {
 		    codeBody = codeBlock.querySelector('.block-body'),
 			newCode = codeBody.innerHTML.split('<br>'),
 			count = '';
-
+		codeBlock.setAttribute('wraptext', 'wrap');
 		while (~newCode[newCode.length - 1].search(/^\s*$/gi)) newCode.pop();
 		codeTitle.insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span>');
 		codeBody.innerHTML = '';
@@ -34,6 +34,55 @@ function numberingCodeLinesFoo() {
 }
 
 document.addEventListener('DOMContentLoaded', numberingCodeLinesFoo);
+
+/* ------------ */
+
+var codeBlocks;
+var initCodeType = true; //true - break, false - wrap;
+var breakClass = "break";
+
+function numberingCodeLinesFoo2() {
+    codeBlocks = document.querySelectorAll(".post-block.code");
+    var myRegEx = /([^$][\s\S]*?)(?:<[^>]*>|$|\n)/g;
+    var numbers, item, nums, blockBody, newCode, linesCount;
+    for (var i = 0; i < codeBlocks.length; i++) {
+        item = codeBlocks[i];
+        blockBody = item.querySelector(".block-body");
+        nums = document.createElement("DIV");
+        numbers = "";
+        newCode = "";
+        linesString = "";
+        linesCount = 0;
+
+        if (initCodeType)
+            item.classList.add(breakClass);
+
+        var match;
+        while (match = myRegEx.exec(blockBody.innerHTML)) {
+            newCode += "<div>" + match[1] + "</div>";
+            linesCount++;
+            numbers += linesCount + "\n";
+        }
+        blockBody.innerHTML = newCode;
+
+        nums.classList.add("num-pre");
+        nums.innerHTML = numbers;
+        item.appendChild(nums);
+
+        item.querySelector(".block-title").insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span>');
+        item.querySelector(".toggle-btn").onclick = onClickToggleBreak;
+    }
+}
+
+function onClickToggleBreak() {
+    for (var i = 0; i < codeBlocks.length; i++) {
+        if (codeBlocks[i].classList.contains(breakClass))
+            codeBlocks[i].classList.remove(breakClass);
+        else
+            codeBlocks[i].classList.add(breakClass);
+    }
+}
+//document.addEventListener('DOMContentLoaded', numberingCodeLinesFoo2);
 
 /**
  *		======================
