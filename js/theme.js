@@ -1,4 +1,87 @@
 /**
+ *		===================
+ *		blocks close & open
+ *		===================
+ */
+
+function blocksOpenClose() {
+	var blockTitleAll = document.querySelectorAll('.post-block.spoil>.block-title,.post-block.code>.block-title'),
+		bt;
+
+	if (!blockTitleAll[0]) return;
+
+	for (var i = 0; i < blockTitleAll.length; i++) {
+		bt = blockTitleAll[i];
+		var bb = bt.parentElement.querySelector('.block-body');
+		if (bb.parentElement.classList.contains('code') && bb.scrollHeight <= bb.offsetHeight) bb.parentElement.classList.remove('box');
+		bt.addEventListener('click', clickOnElement, false);
+	}
+
+	function clickOnElement(event) {
+		var p = el().t.parentElement;
+		function el() {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+			return {e: event, t: target};
+		}
+		if (p.classList.contains('spoil')) toggler("close", "open");
+		if (p.classList.contains('code')) toggler("unbox", "box");
+		function toggler(c, o) {
+			if (p.classList.contains(c)) {
+				p.classList.remove(c);
+				p.classList.add(o);
+			} else if (p.classList.contains(o)) {
+				p.classList.remove(o);
+				p.classList.add(c);
+			}
+		}
+	}
+}
+
+document.addEventListener('DOMContentLoaded', blocksOpenClose);
+
+/**
+ *		================
+ *		scroll to anchor
+ *		================
+ */
+
+function scrollToAnchor() {
+	var link = document.querySelector('.topic_title_post a');
+	var anchor = document.querySelector('a[name="' + link.hash.match(/[^#].*/) + '"]');
+	var p = anchor;
+	if (anchor) {
+		while (!p.classList.contains('post_body')) {
+			if (p.classList.contains('spoil')) {
+				p.classList.remove('close');
+				p.classList.add('open');
+			}
+			p = p.parentNode;
+		}
+	}
+	anchor.scrollIntoView();
+}
+document.addEventListener('DOMContentLoaded', scrollToAnchor);
+
+/**
+ *		=============
+ *		selected text
+ *		=============
+ */
+
+function getSelectedText() {
+	var txt = '';
+	if (window.getSelection) {
+		txt = window.getSelection();
+	} else if (document.getSelection) {
+		txt = document.getSelection();
+	} else if (document.selection) {
+		txt = document.selection.createRange().text;
+	} else return;
+	return txt;
+};
+
+/**
  *		====================
  *		code lines numbering
  *		====================
@@ -8,21 +91,23 @@ function numberingCodeLinesFoo() {
 	var codeBlockAll = document.querySelectorAll('.post-block.code');
 	for (var i = 0; i < codeBlockAll.length; i++) {
 		var codeBlock = codeBlockAll[i],
-		    codeTitle = codeBlock.querySelector('.block-title'),
-		    codeBody = codeBlock.querySelector('.block-body'),
+			codeTitle = codeBlock.querySelector('.block-title'),
+			codeBody = codeBlock.querySelector('.block-body'),
 			newCode = codeBody.innerHTML.split('<br>'),
-			count = '';
-		codeBlock.setAttribute('wraptext', 'wrap');
+			count = '',
+			lines = '';
+
 		while (~newCode[newCode.length - 1].search(/^\s*$/gi)) newCode.pop();
-		codeTitle.insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span>');
-		codeBody.innerHTML = '';
+
 		for (var j = 0; j < newCode.length; j++) {
-			var wrapLines = '<div class="line"><span class="num-wrap">' + (j + 1) + '</span>' + newCode[j] + '</div>';
-			codeBody.insertAdjacentHTML("beforeEnd", wrapLines);
+			lines += '<div class="line"><span class="num-wrap">' + (j + 1) + '</span>' + newCode[j] + '</div>';
 			count += (j + 1) + '\n';
 		}
-		codeBlock.insertAdjacentHTML("beforeEnd", '<div class="num-pre">' + count + '</div>');
-		codeBlock.querySelector('.toggle-btn').addEventListener('click', onClickToggleButton);
+
+		codeBlock.setAttribute('wraptext', 'wrap');
+		codeTitle.insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span><div class="num-pre">' + count + '</div>');
+		codeBlock.querySelector('.toggle-btn').addEventListener('click', onClickToggleButton, false);
+		codeBody.innerHTML = lines;
 	}
 	function onClickToggleButton() {
 		for (var i = 0; i < codeBlockAll.length; i++) {
@@ -42,6 +127,7 @@ var initCodeType = true; //true - break, false - wrap;
 var breakClass = "break";
 
 function numberingCodeLinesFoo2() {
+	var date = new Date();
     codeBlocks = document.querySelectorAll(".post-block.code");
     var myRegEx = /([^$][\s\S]*?)(?:<[^>]*>|$|\n)/g;
     var numbers, item, nums, blockBody, newCode, linesCount;
@@ -54,8 +140,7 @@ function numberingCodeLinesFoo2() {
         linesString = "";
         linesCount = 0;
 
-        if (initCodeType)
-            item.classList.add(breakClass);
+        if (initCodeType) item.classList.add(breakClass);
 
         var match;
         while (match = myRegEx.exec(blockBody.innerHTML)) {
@@ -72,6 +157,8 @@ function numberingCodeLinesFoo2() {
         item.querySelector(".block-title").insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span>');
         item.querySelector(".toggle-btn").onclick = onClickToggleBreak;
     }
+	var date2 = new Date();
+	alert(date2 - date);
 }
 
 function onClickToggleBreak() {
@@ -91,6 +178,7 @@ function onClickToggleBreak() {
  */
 
 function spoilsImageLoad() {
+	if (!document.body.classList.contains("noimages")) return;
 	var postBlockSpoils = document.body.querySelectorAll('.post-block.spoil.close > .block-body');
 	for (var i = 0; i < postBlockSpoils.length; i++) {
 		var images = postBlockSpoils[i].querySelectorAll('img');
@@ -122,9 +210,7 @@ function spoilsImageLoad() {
 	}
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-							  if (!document.body.classList.contains("noimages")) return spoilsImageLoad;
-						  });
+document.addEventListener('DOMContentLoaded', spoilsImageLoad);
 
 /**
  *		=================
@@ -178,8 +264,6 @@ function locationReload() {
  *		================================
  */
 
-document.addEventListener('DOMContentLoaded', pagesPanelFoo);
-
 function pagesPanelFoo() {
 	var panels = document.querySelectorAll('#curator .panel');
 
@@ -218,6 +302,8 @@ function pagesPanelFoo() {
 		}
 	}
 }
+
+document.addEventListener('DOMContentLoaded', pagesPanelFoo);
 
 window.addEventListener("load", function() {
 							var panels = document.querySelectorAll('#curator .panel');
@@ -312,12 +398,6 @@ function invertCheckboxes() {
 		if ('checkbox' == c[i].type) c[i].checked = !c[i].checked;
 }
 
-function invertCheckboxes() {
-	var p = document.documentElement ? document.documentElement : document.body;
-	var c = p.getElementsByTagName('input');
-	for (i = 0; i < c.length; ++i)
-		if ('checkbox' == c[i].type) c[i].checked = !c[i].checked;
-}
 //Уникальная переменная
 var checkedCheckboxInCheckboxesPostCurator = false;
 
@@ -334,8 +414,6 @@ function setCheckedAll() {
 	}
 	checkedCheckboxInCheckboxesPostCurator = !checkedCheckboxInCheckboxesPostCurator;
 }
-
-
 
 function copySelection() {
 	var selObj = window.getSelection();

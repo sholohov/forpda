@@ -6,9 +6,9 @@
 
 //                                ---- COLOR ----
 
-//		@import 'styles/material_light';
+		@import 'styles/material_light';
 //		@import 'styles/material_dark';
-		@import 'styles/material_black';
+//		@import 'styles/material_black';
 
 //		@import 'styles/new_year';
 
@@ -150,10 +150,6 @@ HTML{
 		padding: 0;
 		overflow: hidden;
 		background: mix(@bg-code, @bgColor, 40%);
-		.line {
-			display: block;
-			min-height: @codeLineHeight;
-		}
 		.num-wrap,
 		.num-pre {
 			position: absolute;
