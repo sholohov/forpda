@@ -297,6 +297,11 @@ span[style*="font-size:8pt"] * {
   font-size: 1rem;
   overflow: hidden;
 }
+.post-block.spoil > .block-title .anchor {
+	float: right;
+	margin: -0.5rem -0.75rem -0.5rem 0.25rem;
+	padding: 0.5rem 0.75rem;
+}
 .post-block.spoil > .block-title:empty:after {
   position: relative;
   display: inline;

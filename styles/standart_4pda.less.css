@@ -20,8 +20,9 @@
 @widthPoll:				480px;
 @width:					800px;
 @marginLeft:			13rem;
-@rem:						0.0625rem;
-@em:						0.0625em;
+@rem:					0.0625rem;
+@em:					0.0625em;
+@codeLineHeight:		22*@rem;
 
 .Radius()	 		{ border-radius: 0.125rem; }   // радиус блоков
 
@@ -40,11 +41,10 @@ HTML{
 		line-height: 1.4em;
 		margin: 0 auto;
 		padding: 0.4rem;
+		overflow-wrap: break-word;
 		word-break: break-word;
+		white-space: normal;
 		background-color: @bgColor;
-		* {
-			word-break: break-word;
-		}
 		a {
 			cursor: pointer;
 		}
@@ -82,6 +82,44 @@ HTML{
 	margin: 0.3em 0;
 	font-size: 1rem;
 	border: 1px dotted #aaa;
+	&.quote,
+	&.code,
+	&.hidden,
+	&.spoil {
+		> .block-title {
+			display: block;
+			margin: 0;
+			padding: 0.3rem 0.4rem;
+			font-weight: bold;
+		}
+		> .block-body {
+			margin: 0;
+			padding: 0.4rem;
+			font-size: 1rem;
+			background: white;
+			.spoil {
+				color: black;
+			}
+		}
+	}
+	&.code {
+		> .block-title:before,
+		> .block-title:empty:before {
+			content: 'Код';
+		}
+		> .block-title,
+		> .block-title:empty {
+			position: relative;
+		}
+		&.box > .block-title:before,
+		&.box > .block-title:empty:before {
+			content: 'Код (+)';
+		}
+		&.unbox > .block-title:before,
+		&.unbox .block-title:empty:before {
+			content: 'Код (–)';
+		}
+	}
 	&.close {
 		& > .block-body {
 			display: none;
@@ -122,18 +160,87 @@ HTML{
 		}
 	}
 	&.code {
+		position: relative;
 		border-left: 4px solid #ff6921;
-		& > .block-title {
+		background-color: #FAFCFE;
+		.line {
+			display: block;
+			min-height: @codeLineHeight;
+		}
+		.num-wrap,
+		.num-pre {
+			position: absolute;
+			width: 2rem;
+			padding: 0 0.5rem 0 0;
+			text-align: right;
+			font-family: 'roboto mono';
+			font-size: 14*@rem;
+			line-height: @codeLineHeight;
+			white-space: pre;
+			color: rgba(0,0,0,0.5);
+			-webkit-user-select: none;
+		}
+		.num-wrap {
+			left: 0
+		}
+		.num-pre {
+			left: 0;
+			top: 2.5rem;
+			bottom: 0;
+		}
+		&[wraptext="wrap"] {
+			.num-wrap {
+				dispaly: inline-block;
+			}
+			.num-pre {
+				display: none;
+			}
+		}
+		&[wraptext="pre"] {
+			> .block-body {
+				overflow-wrap: normal;
+				word-break: normal;
+				white-space: pre;
+			}
+			.num-wrap {
+				display: none;
+			}
+			.num-pre {
+				display: block;
+			}
+		}
+		.toggle-btn {
+			position: absolute;
+			padding: 0.25rem 0.5rem;
+			right: 0;
+			top: 0;
+			cursor: pointer;
+			span {
+				font-family: 'roboto mono', Courier, "Courier New", Verdana, Arial;
+				font-weight: bold;
+				color: #ff6921;
+			}
+		}
+		> .block-title {
 			background: #FDDBCC;
 			background-repeat: no-repeat;
 			background-position: right;
-			background-image: url(file:///android_asset/forum/style_images/1/css_img_code.gif),
-			                  url(forum/style_images/1/css_img_code.gif);
+//			background-image: url(file:///android_asset/forum/style_images/1/css_img_code.gif),
+//			                  url(forum/style_images/1/css_img_code.gif);
 		}
-		& > .block-body {
+		> .block-body {
+			padding: 0;
+			margin: 9*@rem 0.5rem 0.5rem 2.5rem;
+			overflow-x: auto;
+			white-space: pre-wrap;
+			font-size: 1rem;
+			line-height: @codeLineHeight;
+			-webkit-tab-size: 4;
+			tab-size: 4;
 			font-family: Courier, "Courier New", Verdana, Arial;
 			color: #465584;
-			background: #FAFCFE;
+			background: linear-gradient(#FAFCFE - 5% @codeLineHeight, transparent @codeLineHeight);
+			background-size: @codeLineHeight * 2 @codeLineHeight * 2;
 		}
 	}
 	&.hidden {
@@ -156,10 +263,18 @@ HTML{
 	}
 	&.spoil {
 		border-left: 4px solid #8394B2;
-		& > .block-title {
+		> .block-title {
 			background: #E4EAF2;
+			.anchor {
+				color: Black;
+				text-decoration: none;
+				font-weight: bold;
+				float: right;
+				margin: -0.5rem -0.75rem -0.5rem 0.25rem;
+				padding: 0.5rem 0.75rem;
+			}
 		}
-		& > .block-body {
+		> .block-body {
 			background: #FAFCFE;
 		}
 		&.open {
@@ -197,44 +312,6 @@ HTML{
 					content: ' )';
 				}
 			}
-		}
-	}
-	&.quote,
-	&.code,
-	&.hidden,
-	&.spoil {
-		> .block-title {
-			display: block;
-			margin: 0;
-			padding: 0.3rem 0.4rem;
-			font-weight: bold;
-		}
-		> .block-body {
-			margin: 0;
-			padding: 0.4rem;
-			font-size: 1rem;
-			background: white;
-			.spoil {
-				color: black;
-			}
-		}
-	}
-	&.code {
-		> .block-title:before,
-		> .block-title:empty:before {
-			content: 'Код';
-		}
-		> .block-title,
-		> .block-title:empty {
-			position: relative;
-		}
-		&.box > .block-title:before,
-		&.box > .block-title:empty:before {
-			content: 'Код (+)';
-		}
-		&.unbox > .block-title:before,
-		&.unbox .block-title:empty:before {
-			content: 'Код (–)';
 		}
 	}
 	&.cur {
@@ -1765,8 +1842,6 @@ h3 a{
 	}
 }
 
-
-@import "styles/fontello";
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
 color: mix(@color, @tmColor, 30%);

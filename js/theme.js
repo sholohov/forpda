@@ -14,7 +14,7 @@ function blocksOpenClose() {
 		bt = blockTitleAll[i];
 		var bb = bt.parentElement.querySelector('.block-body');
 		if (bb.parentElement.classList.contains('code') && bb.scrollHeight <= bb.offsetHeight) bb.parentElement.classList.remove('box');
-		bt.addEventListener('click', clickOnElement, false);
+		bt.addEventListener('click', clickOnElement);
 	}
 
 	function clickOnElement(event) {
@@ -30,7 +30,8 @@ function blocksOpenClose() {
 			if (p.classList.contains(c)) {
 				p.classList.remove(c);
 				p.classList.add(o);
-			} else if (p.classList.contains(o)) {
+			}
+			else if (p.classList.contains(o)) {
 				p.classList.remove(o);
 				p.classList.add(c);
 			}
@@ -39,6 +40,26 @@ function blocksOpenClose() {
 }
 
 document.addEventListener('DOMContentLoaded', blocksOpenClose);
+
+/**
+ *		========================
+ *		add anchor link to spoil
+ *		========================
+ */
+
+document.addEventListener('DOMContentLoaded', getAllSpoilerToCreateAnchorLink);
+function getAllSpoilerToCreateAnchorLink() {
+	if (document.body.id != 'topic') return;
+	var link = document.querySelector('.topic_title_post a');
+	var postAll = document.querySelectorAll('.post_container');
+	for (var i = 0; i < postAll.length; i++) {
+		var postId = postAll[i].getAttribute('name').match(/\d+/);
+		var spoilerAll = postAll[i].querySelectorAll('.post-block.spoil > .block-title');
+		for (var j=0; j < spoilerAll.length; j++) {
+			spoilerAll[j].insertAdjacentHTML("beforeEnd", '<a class="anchor" onclick="event.preventDefault();" href="http://4pda.ru/forum/index.php?act=findpost&pid='+postId+'&anchor=Spoil-' + postId + '-' + (j + 1) + '" name="Spoil-' + postId + '-' + (j + 1) + '" title="Spoil-' + postId + '-' + (j + 1) + '"><span>#</span></a>');
+		}
+	}
+}
 
 /**
  *		================
@@ -51,11 +72,12 @@ function scrollToAnchor() {
 	var anchor = document.querySelector('a[name="' + link.hash.match(/[^#].*/) + '"]');
 	var p = anchor;
 	if (anchor) {
-		while (!p.classList.contains('post_body')) {
+		while (!p.classList.contains('post_container')) {
 			if (p.classList.contains('spoil')) {
 				p.classList.remove('close');
 				p.classList.add('open');
 			}
+			else if (p.classList.contains('hat')) toggleSpoilerVisibility(p.querySelector('.hidetop input'));
 			p = p.parentNode;
 		}
 	}
@@ -73,11 +95,14 @@ function getSelectedText() {
 	var txt = '';
 	if (window.getSelection) {
 		txt = window.getSelection();
-	} else if (document.getSelection) {
+	}
+	else if (document.getSelection) {
 		txt = document.getSelection();
-	} else if (document.selection) {
+	}
+	else if (document.selection) {
 		txt = document.selection.createRange().text;
-	} else return;
+	}
+	else return;
 	return txt;
 };
 
@@ -113,7 +138,8 @@ function numberingCodeLinesFoo() {
 		for (var i = 0; i < codeBlockAll.length; i++) {
 			if (codeBlockAll[i].getAttribute('wraptext') == 'wrap') {
 				codeBlockAll[i].setAttribute('wraptext', 'pre');
-			} else codeBlockAll[i].setAttribute('wraptext', 'wrap');
+			}
+			else codeBlockAll[i].setAttribute('wraptext', 'wrap');
 		}
 	}
 }
@@ -295,7 +321,8 @@ function pagesPanelFoo() {
 			if (this.classList.contains('close')) {
 				this.classList.remove('close');
 				this.classList.add('open');
-			} else {
+			}
+			else {
 				this.classList.remove('open');
 				this.classList.add('close');
 			}
@@ -336,14 +363,16 @@ function checkedQmsMessage() {
 				checkbox.checked = false;
 				target.classList.remove('selected');
 				messForDeleteCount--;
-			} else {
+			}
+			else {
 				checkbox.checked = true;
 				target.classList.add('selected');
 				messForDeleteCount++;
 			}
 			if (messForDeleteCount > 0) {
 				HTMLOUT.startDeleteModeJs(messForDeleteCount);
-			} else {
+			}
+			else {
 				HTMLOUT.stopDeleteModeJs();
 			}
 			return;
