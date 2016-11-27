@@ -5,41 +5,43 @@
  */
 
 function blocksOpenClose() {
-	var blockTitleAll = document.querySelectorAll('.post-block.spoil>.block-title,.post-block.code>.block-title'),
-		bt;
+	var blockTitleAll = document.querySelectorAll('.post-block.spoil>.block-title,.post-block.code>.block-title');
 
 	if (!blockTitleAll[0]) return;
 
 	for (var i = 0; i < blockTitleAll.length; i++) {
-		bt = blockTitleAll[i];
+		var bt = blockTitleAll[i];
 		var bb = bt.parentElement.querySelector('.block-body');
-		if (bb.parentElement.classList.contains('code') && bb.scrollHeight <= bb.offsetHeight) bb.parentElement.classList.remove('box');
+		if (bb.parentElement.classList.contains('code') && bb.scrollHeight <= bb.offsetHeight) {
+			bb.parentElement.classList.remove('box');
+		}
 		bt.addEventListener('click', clickOnElement);
 	}
-
 	function clickOnElement(event) {
-		var p = el().t.parentElement;
-		function el() {
-			var event = event || window.event;
-			var target = event.target || event.srcElement;
-			return {e: event, t: target};
-		}
-		if (p.classList.contains('spoil')) toggler("close", "open");
-		if (p.classList.contains('code')) toggler("unbox", "box");
-		function toggler(c, o) {
-			if (p.classList.contains(c)) {
-				p.classList.remove(c);
-				p.classList.add(o);
+		var e = event || window.event;
+		var t = e.target || e.srcElement;
+		e.preventDefault();
+		e.stopPropagation();
+		while (t.className != 'post_body') {
+			if (t.classList.contains('spoil')) toggler("close", "open");
+			if (t.classList.contains('code')) toggler("unbox", "box");
+			function toggler(c, o) {
+				if (t.classList.contains(c)) {
+					t.classList.remove(c);
+					t.classList.add(o);
+				}
+				else if (t.classList.contains(o)) {
+					t.classList.remove(o);
+					t.classList.add(c);
+				}
+				return;
 			}
-			else if (p.classList.contains(o)) {
-				p.classList.remove(o);
-				p.classList.add(c);
-			}
+			t = t.parentElement;
 		}
 	}
 }
 
-document.addEventListener('DOMContentLoaded', blocksOpenClose);
+window.addEventListener('load', blocksOpenClose);
 
 /**
  *		========================
@@ -49,14 +51,15 @@ document.addEventListener('DOMContentLoaded', blocksOpenClose);
 
 document.addEventListener('DOMContentLoaded', getAllSpoilerToCreateAnchorLink);
 function getAllSpoilerToCreateAnchorLink() {
-	if (document.body.id != 'topic') return;
+	if (document.body.id != 'topic' || document.body.querySelector('.block-title .anchor')) return;
 	var link = document.querySelector('.topic_title_post a');
 	var postAll = document.querySelectorAll('.post_container');
 	for (var i = 0; i < postAll.length; i++) {
 		var postId = postAll[i].getAttribute('name').match(/\d+/);
 		var spoilerAll = postAll[i].querySelectorAll('.post-block.spoil > .block-title');
 		for (var j=0; j < spoilerAll.length; j++) {
-			spoilerAll[j].insertAdjacentHTML("beforeEnd", '<a class="anchor" onclick="event.preventDefault();" href="http://4pda.ru/forum/index.php?act=findpost&pid='+postId+'&anchor=Spoil-' + postId + '-' + (j + 1) + '" name="Spoil-' + postId + '-' + (j + 1) + '" title="Spoil-' + postId + '-' + (j + 1) + '"><span>#</span></a>');
+			if (spoilerAll[j].textContent.length == 0) spoilerAll[j].classList.add('empty');
+			spoilerAll[j].insertAdjacentHTML("beforeEnd", '<a class="anchor" onclick="event.preventDefault();" href="http://4pda.ru/forum/index.php?act=findpost&pid=' + postId + '&anchor=Spoil-' + postId + '-' + (j + 1) + '" name="Spoil-' + postId + '-' + (j + 1) + '" title="Spoil-' + postId + '-' + (j + 1) + '"><span>#</span></a>');
 		}
 	}
 }
@@ -72,12 +75,15 @@ function scrollToAnchor() {
 	var anchor = document.querySelector('a[name="' + link.hash.match(/[^#].*/) + '"]');
 	var p = anchor;
 	if (anchor) {
-		while (!p.classList.contains('post_container')) {
-			if (p.classList.contains('spoil')) {
-				p.classList.remove('close');
-				p.classList.add('open');
+		while (!t.classList.contains('post_container')) {
+			if (t.classList.contains('spoil')) {
+				t.classList.remove('close');
+				t.classList.add('open');
 			}
-			else if (p.classList.contains('hat')) toggleSpoilerVisibility(p.querySelector('.hidetop input'));
+			if (t.classList.contains('hat')) {
+				toggleSpoilerVisibility(p.querySelector('.hidetop input'));
+				openHat(p.querySelector('.hidetop'));
+			}
 			p = p.parentNode;
 		}
 	}
@@ -125,7 +131,7 @@ function numberingCodeLinesFoo() {
 		while (~newCode[newCode.length - 1].search(/^\s*$/gi)) newCode.pop();
 
 		for (var j = 0; j < newCode.length; j++) {
-			lines += '<div class="line"><span class="num-wrap">' + (j + 1) + '</span>' + newCode[j] + '</div>';
+			lines += '<span class="line">' + newCode[j] + '</span><br>';
 			count += (j + 1) + '\n';
 		}
 
@@ -134,7 +140,8 @@ function numberingCodeLinesFoo() {
 		codeBlock.querySelector('.toggle-btn').addEventListener('click', onClickToggleButton, false);
 		codeBody.innerHTML = lines;
 	}
-	function onClickToggleButton() {
+	function onClickToggleButton(e) {
+		e.stopPropagation();
 		for (var i = 0; i < codeBlockAll.length; i++) {
 			if (codeBlockAll[i].getAttribute('wraptext') == 'wrap') {
 				codeBlockAll[i].setAttribute('wraptext', 'pre');
@@ -145,57 +152,6 @@ function numberingCodeLinesFoo() {
 }
 
 document.addEventListener('DOMContentLoaded', numberingCodeLinesFoo);
-
-/* ------------ */
-
-var codeBlocks;
-var initCodeType = true; //true - break, false - wrap;
-var breakClass = "break";
-
-function numberingCodeLinesFoo2() {
-	var date = new Date();
-    codeBlocks = document.querySelectorAll(".post-block.code");
-    var myRegEx = /([^$][\s\S]*?)(?:<[^>]*>|$|\n)/g;
-    var numbers, item, nums, blockBody, newCode, linesCount;
-    for (var i = 0; i < codeBlocks.length; i++) {
-        item = codeBlocks[i];
-        blockBody = item.querySelector(".block-body");
-        nums = document.createElement("DIV");
-        numbers = "";
-        newCode = "";
-        linesString = "";
-        linesCount = 0;
-
-        if (initCodeType) item.classList.add(breakClass);
-
-        var match;
-        while (match = myRegEx.exec(blockBody.innerHTML)) {
-            newCode += "<div>" + match[1] + "</div>";
-            linesCount++;
-            numbers += linesCount + "\n";
-        }
-        blockBody.innerHTML = newCode;
-
-        nums.classList.add("num-pre");
-        nums.innerHTML = numbers;
-        item.appendChild(nums);
-
-        item.querySelector(".block-title").insertAdjacentHTML("afterEnd", '<span class="toggle-btn"><span>PRE</span></span>');
-        item.querySelector(".toggle-btn").onclick = onClickToggleBreak;
-    }
-	var date2 = new Date();
-	alert(date2 - date);
-}
-
-function onClickToggleBreak() {
-    for (var i = 0; i < codeBlocks.length; i++) {
-        if (codeBlocks[i].classList.contains(breakClass))
-            codeBlocks[i].classList.remove(breakClass);
-        else
-            codeBlocks[i].classList.add(breakClass);
-    }
-}
-//document.addEventListener('DOMContentLoaded', numberingCodeLinesFoo2);
 
 /**
  *		======================
@@ -251,16 +207,16 @@ function getAttaches() {
 		var post = anchorList[i].nextElementSibling;
 		if (post.className != 'post_container') break;
 		var attachList = post.querySelectorAll("a[rel*='lytebox']");
-		var obj = [];
+		var arr = [];
 		for (var j = 0, count = 0; j < attachList.length; j++) {
 			var att = attachList[j].getAttribute('href');
 			if (att.match(/jpg|png|bmp|gif|jpeg/i)) {
-				obj.push(att);
+				arr.push(att);
 				count++;
 			}
 		}
-		if (!obj[0]) continue;
-		jsonArr.push(obj);
+		if (!arr[0]) continue;
+		jsonArr.push(arr);
 	}
 	return jsonArr;
 }
@@ -356,7 +312,6 @@ function checkedQmsMessage() {
 	var event = event || window.event;
 	var target = event.target || event.srcElement;
 	while (target != this) {
-		if (target.nodeName == 'A') return;
 		if (~target.className.indexOf('list-group-item')) {
 			var checkbox = target.getElementsByTagName('input')[0];
 			if (checkbox.checked) {

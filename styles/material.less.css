@@ -6,13 +6,14 @@
 
 //                                ---- COLOR ----
 
-//		@import 'styles/material_light';
-		@import 'styles/material_dark';
+		@import 'styles/material_light';
+//		@import 'styles/material_dark';
 //		@import 'styles/material_black';
 
 //		@import 'styles/new_year';
 
 @width:					50rem;
+@micro:					15rem;
 @widthPoll:				30rem;
 @rem:					0.0625rem;
 @em:					0.0625em;
@@ -46,7 +47,6 @@ HTML{
 		margin: 0.5rem 0 0;
 		padding: 0.5rem 0 5rem;
 		font-size: 1em;
-		font-weight: 1.4;
 		overflow-wrap: break-word;
 		word-break: break-word;
 		white-space: normal;
@@ -54,7 +54,6 @@ HTML{
 		color: @color;
 		box-sizing: border-box;
 		background-color: @tmColor;
-//		*,
 		&.ongpuimg {
 			img,
 			.img {
@@ -146,28 +145,33 @@ HTML{
 		}
 	}
 	&.code {
+		counter-reset: num-line;
 		position: relative;
 		padding: 0;
 		overflow: hidden;
 		background: mix(@bg-code, @bgColor, 40%);
 		.line {
-			display: block;
 			min-height: @codeLineHeight;
+//			&:nth-child(2n + 1) {
+//				background: mix(mix(@bg-code, @bgColor, 40%),@color,97%);
+//			}
 		}
-		.num-wrap,
+		.line:before,
 		.num-pre {
+			counter-increment: num-line;
+			content: counter(num-line);
 			position: absolute;
 			width: 2rem;
 			padding: 0 0.5rem 0 0;
 			text-align: right;
-			font-family: 'roboto mono';
+			font-family: 'Roboto Mono';
 			font-size: 14*@rem;
 			line-height: @codeLineHeight;
 			white-space: pre;
 			color: mix(@bg-code, @color, 70%);
 			-webkit-user-select: none;
 		}
-		.num-wrap {
+		.line:before {
 			left: 0
 		}
 		.num-pre {
@@ -176,7 +180,7 @@ HTML{
 			bottom: 0;
 		}
 		&[wraptext="wrap"] {
-			.num-wrap {
+			.line:before {
 				dispaly: inline-block;
 			}
 			.num-pre {
@@ -184,12 +188,15 @@ HTML{
 			}
 		}
 		&[wraptext="pre"] {
+			.toggle-btn {
+				opacity: 0.5;
+			}
 			> .block-body {
 				overflow-wrap: normal;
 				word-break: normal;
 				white-space: pre;
 			}
-			.num-wrap {
+			.line:before {
 				display: none;
 			}
 			.num-pre {
@@ -225,6 +232,7 @@ HTML{
 			}
 		}
 		>.block-body {
+			font-family: 'Roboto Mono';
 			padding: 0;
 			margin: 0 0.5rem 0.5rem 2.5rem;
 			overflow-x: auto;
@@ -245,7 +253,7 @@ HTML{
 			}
 			> .block-body {
 				max-height: 9.5rem;
-				overflow: hidden;
+				overflow-y: hidden;
 			}
 		}
 		&.unbox {
@@ -293,16 +301,32 @@ HTML{
 			transition: 0.3s ease;
 		}
 		>.block-title {
-			padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+			padding: 0.5rem 2.25rem 0.5rem;
 			font-style: normal;
+			min-height: 1.25rem;
 			color: white;
 			font-size: 1rem;
 			overflow: hidden;
 			.anchor {
-				float: right;
-				margin: -0.5rem -0.75rem -0.5rem 0.25rem;
-				padding: 0.5rem 0.75rem;
+				position: absolute;
+				right: 0;
+				top: 0;
+				span {
+					display: none;
+				}
+				&:before {
+					content:'';
+					display: block;
+					width: 20*@rem;
+					height: 20*@rem;
+					padding: 8*@rem;
+					opacity: 0.75;
+					background-repeat: no-repeat;
+					background-position: center;
+					background-size: 20*@rem;
+				}
 			}
+			&.empty:after,
 			&:empty:after {
 				position: relative;
 				display: inline;
@@ -314,15 +338,15 @@ HTML{
 				line-height: 1.4 !important;
 				font-style: normal !important;
 			}
-		}	
+		} 
 		>.block-body {
 			padding: 0.75rem;
 			margin: 0;
 			box-sizing: border-box;
 			.spoil.open {
-				margin: 0.5rem 0;
+				margin: 0.5rem -0.5rem;
 				>.block-body {
-					padding-right: 0;
+					padding: 0.75rem;
 				}
 			}
 		}
@@ -335,6 +359,9 @@ HTML{
 			}
 			> .block-title {
 				background: @spoilColor;
+				.anchor:before {
+					background-image: url(material_src/link_white.svg);
+				}
 			}
 			> .block-body {
 				display: none;
@@ -348,9 +375,6 @@ HTML{
 				border-left-color: mix(@color, @bgColor, 60%);
 			}
 			.open {
-//				border-radius: 0;
-//				border-left: 2px solid mix(@color, @bgColor, 20%);
-
 				background: @bgColor;
 				.open {
 					background: rgba(128,128,128,0.1);
@@ -373,10 +397,26 @@ HTML{
 			}
 			> .block-title {
 				color: mix(@color, @bgColor, 60%);
-//				background: mix(@color, @bgColor, 10%);
 				margin: 0;
+				.anchor:before {
+					background-image: url(material_src/link_grey.svg);
+				}
 			}
 		}
+			@media screen and (max-width: (@micro)) {
+				&:before {
+					display: none;	
+				}
+				> .block-title {
+					padding: 0.5rem 1.5rem 0.5rem 0.5rem;
+					.anchor {
+//						position: static;
+//						float: right;
+						&:before {
+						}
+					}
+				}
+			}
 	}
 }
 
@@ -411,7 +451,7 @@ HTML{
 		display: table-cell;
 		vertical-align: middle;
 		color: @bgColor;
-		width: 5rem;
+		width: 4rem;
 		text-align: center;
 		height: 100%;
 		font-size: 3rem;
@@ -427,6 +467,15 @@ HTML{
 		background: mix(@color, @bgColor, 5%);
 		background: rgba(128,128,128,0.1);
 	}
+	@media screen and (max-width: (@micro)) {
+		> .block-title {
+			font-size: 1.5rem;
+			font-weight: bold;
+			width: 20%
+		}
+		> .block-body {
+		}
+	}
 }
 
 /*
@@ -439,8 +488,6 @@ HTML{
 		display: block;
 		margin: 0;
 		padding: 0;
-//		background: @bgColor;
-//		.BoxShadow(1);
 		.button {
 			display: inline-block;
 			padding: 0.75rem 6%;
@@ -456,15 +503,15 @@ HTML{
 			&.disable {
 				color: mix(@color, @tmColor, 10%);
 			}
-		}
-		&.top {
-//			border-bottom: 1px solid @borderColor;
+			@media screen and (max-width: (@micro)) {
+				&.page {
+					display: block;
+					margin: 0;
+				}
+			}
 		}
 		&.bottom {
-//			position: absolute;
-//			bottom: 5rem;
 			width: 100%;
-//			border-top: 1px solid @borderColor;
 		}
 	}
 	.topic_title_post {
@@ -493,7 +540,7 @@ HTML{
 		#viewers, 
 		#writers {
 			display: inline-block;
-			margin: 0 -0.2rem 0 0;
+			margin: 0;
 			padding: 0.7rem 1rem;
 			font-weight: bold;
 			text-transform: uppercase;
@@ -592,6 +639,11 @@ HTML{
 //	border-bottom: 1px solid @borderColor;
 	background: @bgColor;
 	.BoxShadow(1);
+	@media screen and (max-width: (@micro)) {
+		margin: 0.5rem 0;
+		border-radius: 0;
+		.BoxShadow(2);
+	}
 	.hidemain {
 		FORM {
 			overflow: hidden;
@@ -787,22 +839,23 @@ HTML{
 .posts_list {
 	margin: 1rem 0;
 	padding: 0;
-//	border-top: 1px solid @borderColor;
-//	border-bottom: 1px solid @borderColor;
-//	background: @bgColor;
-//	.BoxShadow(1);
 }
 .post_container {
 	position: relative;
 	clear: both;
 	margin: 0.5rem;
 	padding: 0.75rem 0.75rem 0;
-//	overflow: hidden;
 	.Radius;
-//	border-bottom: 1px solid @borderColor;
 	background: @bgColor;
 	.BoxShadow(1);
 	z-index: 98;
+	@media screen {
+		@media (max-width: (@micro)) {
+			margin: 0.5rem 0;
+			border-radius: 0;
+			.BoxShadow(2);
+		}
+	}
 	&.active {
 		margin-top: 3rem;
 		&:after {
@@ -812,8 +865,11 @@ HTML{
 			top: -2.125rem;
 			left: 50%;
 			width: 10rem;
+			max-width: 100%;
 			margin-left: -5rem;
 			display: block;
+			white-space: nowrap;
+			overflow-x: hidden;
 			text-align: center;
 			color: mix(@color,@tmColor,45%);
 			background-color: @tmColor;
@@ -846,31 +902,45 @@ HTML{
 	min-height: 4rem;
 	-webkit-user-select: none;
 	user-select: none;
-	@media screen and (min-width: (@width)) {
-//		position: absolute;
-		float: left;
-		padding: 1.5rem 0 0;
-		width: 12rem;
-		text-align: center;
+	@media screen {
+		@media (min-width: (@width)) {
+			float: left;
+			padding: 1.5rem 0 0;
+			width: 12rem;
+			text-align: center;
+		}
+		@media (max-width: (@micro)) {
+//			position: static;
+			padding: 0;
+			text-align: center;
+		}
 	}
 	&[title*="Просмотреть репутацию"] {
 		color: #000 !important;
 		text-decoration: underline !important;
 	}
 	.header_wrapper {
+		@media screen and (max-width: (@micro)) {
+			
+		}
 		.avatar {
-//			position: absolute;
 			float: left;
 			margin: 0 0.75rem 0 0;
-			@media screen and (min-width: (@width)) {
-				float: none;
-				margin: 0.5rem 0;
-				padding: 0;
+			@media screen {
+				@media (min-width: (@width)) {
+					float: none;
+					margin: 0.5rem 0;
+					padding: 0;
+				}
+				@media (max-width: (@micro)) {
+					float: none;
+					margin: 0 0 0.5rem;
+				}
 			}
 			&.disable {
 				margin: 4*@rem 0 0;
 				overflow: hidden;
-				@media screen and (max-width: (@width)) {
+				@media screen and (max-width: (@width)) not (max-width: (@micro)) {
 					height: 4rem;
 					margin: 0 3*@rem 0 0;
 				}
@@ -912,12 +982,14 @@ HTML{
 		.nick {
 			font-size: 1.1875rem;
 			color: mix(@color, @bgColor, 75%);
-			@media screen and (min-width: (@width)) {
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				text-align: center;
+			@media screen {
+				@media (min-width: (@width)) {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+				}
 			}
 			&.online {
 				color: @nick-online-color;
@@ -951,14 +1023,16 @@ HTML{
 		.reputation {
 			font-size: 0.875rem;
 			font-weight: bold;
-			@media screen and (min-width: (@width)) {
-				display: block;
+			@media screen {
+				@media (min-width: (@width)) {
+					display: block;
+				}
 			}
 			& span:after {
 				content:'★';
 				margin-left: 3*@rem;
 				display: inline-block;
-				@media screen and (max-width: (@width)) {
+				@media screen and (max-width: (@width)) not (max-width: (@micro)) {
 					margin-right: 3*@rem;
 				}
 			}
@@ -983,12 +1057,22 @@ HTML{
 			background: url(material_src/more.svg) center no-repeat;
 			background-size: 1.625rem;
 			cursor: pointer;
-			@media screen and (max-width: (@width)) {
-				position: absolute;
-				right: -6*@rem;
-				top: -6*@rem;
-				-webkit-transform: rotate(90deg);
-				transform: rotate(90deg);
+			@media screen {
+				@media (max-width: (@width)) {
+					position: absolute;
+					right: -6*@rem;
+					top: -6*@rem;
+					-webkit-transform: rotate(90deg);
+					transform: rotate(90deg);
+				}
+				@media (max-width: (@micro)) {
+					position: relative;
+					margin: 0 auto;
+					right: 0;
+					top: 0;
+					-webkit-transform: rotate(0);
+					transform: rotate(0);
+				}
 			}
 			span {
 				display: none;
@@ -1445,10 +1529,6 @@ div[data-post] {
 //			.BoxShadow(1);
 			-webkit-transition: ease 0.3s background;
 			transition: ease 0.3s background;
-			.code > .block-body {
-//				white-space: pre !important;
-//				word-break: normal !important;
-			}
 			@media screen and (min-width: (@width)) {
 				max-width: 60vw;
 			}

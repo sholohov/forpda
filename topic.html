@@ -8,11 +8,11 @@
 		<link rel="stylesheet" type="text/css" href="/fonts/flaticons/import.css">
 		<link rel="stylesheet" type="text/css" href="/fonts/fontello/import.css">
 		<link rel="stylesheet" type="text/css" href="/styles/page_rewind.css">
-		<!--<link rel="stylesheet" type="text/css" href="/styles/material_light.css">-->
-		<script type="text/javascript" src="/js/z_forum_helpers.js"></script>
+		<link rel="stylesheet" type="text/css" href="/styles/material_light.css">
+		<!--script type="text/javascript" src="/js/z_forum_helpers.js"></script-->
 		<script type="text/javascript" src="/js/theme.js"></script>
-		<script type="text/javascript" src="/js/blockeditor.js"></script>
-		<!--<script type="text/javascript" src="/js/z_emoticons.js"></script>-->
+		<!--script type="text/javascript" src="/js/blockeditor.js"></script-->
+		<script type="text/javascript" src="/js/z_emoticons.js"></script>
 		<title>Топик.</title>
 	</head>
 
@@ -641,7 +641,7 @@ fix_linked_img_thumb("6123946-bb", parseInt("2048"), parseInt("709"), "94,89 К�
 						<li>
 							<font style="font-size:9px;color:gray;">содержимое блока оффтопа</font><br></li>
 						<li>
-							<div class="post-block code ">
+							<div class="post-block code box">
 								<div class="block-title"></div>
 								<div class="block-body ">содержимое блока кода<br></div>
 							</div><br></li>
@@ -697,7 +697,7 @@ fix_linked_img_thumb("6123946-bb", parseInt("2048"), parseInt("709"), "94,89 К�
 						<div class="block-body">Скрытый Текст</div>
 					</div><br><br>
 					<div class="post-block spoil close">
-						<div class="block-title">Spoiler - Матрёшка</div>
+						<div class="block-title">Spoiler - Матрёшка (Очень длинное название спойлера)</div>
 						<div class="block-body">
 							<div class="post-block spoil close">
 								<div class="block-title">Spoiler 1</div>
@@ -740,7 +740,7 @@ fix_linked_img_thumb("6123946-bb", parseInt("2048"), parseInt("709"), "94,89 К�
 								<div class="block-title"></div>
 								<div class="block-body">скрытый текст</div>
 							</div>
-							<div class="post-block code ">
+							<div class="post-block code box">
 								<div class="block-title"></div>
 								<div class="block-body ">код</div>
 							</div>
@@ -934,7 +934,7 @@ fix_linked_img_thumb("4086139-bb", parseInt("720"), parseInt("1280"), "54,09 К�
 						</div>
 					</div>
 					<font style="font-size:9px;color:gray; ">Это сообщение было отправлено Twitter-ботом</font>
-
+					<button onclick="getAllSpoilerToCreateAnchorLink()">foo spoil anchor</button>
 					<br><span class="edit">Сообщение отредактировал <b>corola</b> - 27.01.2014, 11:00</span></div>
 				<div class="post_footer"><a class="link button claim" href="/forum/index.php?act=report&amp;t=541046&amp;p=28830058&amp;st=100"><span>Жалоба</span></a><a class="button nick" onclick="window.HTMLOUT.insertTextToPost('[SNAPBACK]28830058[/SNAPBACK] [B]corola,[/B] \n')"><span>Ник</span></a><a class="button quote" onclick="window.HTMLOUT.quote('490', '541046', '28830058', '27.01.2014, 10:52', '323878', 'corola')"><span>Цитата</span></a><a class="button vote bad" onclick="window.HTMLOUT.postVoteBad('28830058')"><span>Плохо</span></a><a class="button vote good" onclick="window.HTMLOUT.postVoteGood('28830058')"><span>Хорошо</span></a><a class="button edit" id="edit-but-28830058" href="/forum/index.php?act=post&amp;do=edit_post&amp;f=490&amp;t=541046&amp;p=28830058&amp;st=100"><span>Изменить</span></a><a class="button delete" href="/forum/index.php?act=Mod&amp;CODE=04&amp;f=490&amp;t=541046&amp;p=28830058&amp;st=100&amp;auth_key=da2cceaba9c77a856611200bad5be02f"><span>Удалить</span></a></div>
 

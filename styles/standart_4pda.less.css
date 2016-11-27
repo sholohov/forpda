@@ -127,8 +127,8 @@ HTML{
 	}
 	&.box {
 		& > .block-body {
-			max-height: 10rem;
-			overflow: auto;
+			max-height: 9.5rem;
+			overflow-y: hidden;
 		}
 	}
 	&.quote {
@@ -160,27 +160,33 @@ HTML{
 		}
 	}
 	&.code {
+		counter-reset: num-line;
 		position: relative;
+		overflow: hidden;
 		border-left: 4px solid #ff6921;
 		background-color: #FAFCFE;
 		.line {
-			display: block;
 			min-height: @codeLineHeight;
+//			&:nth-child(2n) {
+//				background: #FAFCFE - 10%;
+//			}
 		}
-		.num-wrap,
+		.line:before,
 		.num-pre {
+			counter-increment: num-line;
+			content: counter(num-line);
 			position: absolute;
 			width: 2rem;
 			padding: 0 0.5rem 0 0;
 			text-align: right;
-			font-family: 'roboto mono';
+			font-family: 'Roboto Mono';
 			font-size: 14*@rem;
 			line-height: @codeLineHeight;
 			white-space: pre;
 			color: rgba(0,0,0,0.5);
 			-webkit-user-select: none;
 		}
-		.num-wrap {
+		.line:before {
 			left: 0
 		}
 		.num-pre {
@@ -189,7 +195,7 @@ HTML{
 			bottom: 0;
 		}
 		&[wraptext="wrap"] {
-			.num-wrap {
+			.line:before {
 				dispaly: inline-block;
 			}
 			.num-pre {
@@ -202,7 +208,7 @@ HTML{
 				word-break: normal;
 				white-space: pre;
 			}
-			.num-wrap {
+			.line:before {
 				display: none;
 			}
 			.num-pre {
@@ -215,10 +221,10 @@ HTML{
 			right: 0;
 			top: 0;
 			cursor: pointer;
-			span {
-				font-family: 'roboto mono', Courier, "Courier New", Verdana, Arial;
+			span { 
+				font-family: 'Roboto Mono', Courier, "Courier New", Verdana, Arial;
 				font-weight: bold;
-				color: #ff6921;
+				color: #F87655;
 			}
 		}
 		> .block-title {
@@ -229,6 +235,7 @@ HTML{
 //			                  url(forum/style_images/1/css_img_code.gif);
 		}
 		> .block-body {
+			font-family: 'Roboto Mono', Courier, "Courier New", Verdana, Arial;
 			padding: 0;
 			margin: 9*@rem 0.5rem 0.5rem 2.5rem;
 			overflow-x: auto;
@@ -237,9 +244,8 @@ HTML{
 			line-height: @codeLineHeight;
 			-webkit-tab-size: 4;
 			tab-size: 4;
-			font-family: Courier, "Courier New", Verdana, Arial;
 			color: #465584;
-			background: linear-gradient(#FAFCFE - 5% @codeLineHeight, transparent @codeLineHeight);
+			background: linear-gradient(#FAFCFE - 8% @codeLineHeight, transparent @codeLineHeight);
 			background-size: @codeLineHeight * 2 @codeLineHeight * 2;
 		}
 	}
@@ -264,14 +270,18 @@ HTML{
 	&.spoil {
 		border-left: 4px solid #8394B2;
 		> .block-title {
+			position: relative;
+			padding-right: 1.75rem;
 			background: #E4EAF2;
 			.anchor {
+				position: absolute;
+				right: 0;
+				top: 0;
 				color: Black;
 				text-decoration: none;
 				font-weight: bold;
 				float: right;
-				margin: -0.5rem -0.75rem -0.5rem 0.25rem;
-				padding: 0.5rem 0.75rem;
+				padding: 0.25rem 0.5rem;
 			}
 		}
 		> .block-body {
@@ -282,6 +292,7 @@ HTML{
 				&:before {
 					content: 'Спойлер (–) ( ';
 				}
+				&.empty,
 				&:empty {
 					&:before {
 						content: 'Спойлер (–)';
@@ -300,6 +311,7 @@ HTML{
 				&:before {
 					content: 'Спойлер (+) ( ';
 				}
+				&.empty,
 				&:empty {
 					&:before {
 						content: 'Спойлер (+)';
@@ -2140,7 +2152,7 @@ color: mix(@color, @tmColor, 30%);
 				.icon-hide-comment {
 					display: none;
 				}
-				.num-wrap {
+				.line:before {
 					.num {
 						position: relative;
 						top: 1px;

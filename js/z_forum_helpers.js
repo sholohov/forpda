@@ -59,8 +59,7 @@
             var a, c;
             a = l(".post-block.close>.block-title,.post-block.open>.block-title");
             for (c = 0; c < a.length; c++) 1 !== parseInt(a[c].getAttribute("data-block-init")) && (a[c].setAttribute("data-block-init", 1), p(a[c], function (a) {
-                a ||
-                    b.event;
+                a || b.event;
                 a.preventDefault ? a.preventDefault() : a.returnValue = !1;
                 e(e(this.parentNode, "close"), "open")
             }));
