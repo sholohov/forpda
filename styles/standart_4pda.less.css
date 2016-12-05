@@ -286,6 +286,17 @@ HTML{
 		}
 		> .block-body {
 			background: #FAFCFE;
+			.spoil_close {
+				display: block;
+				margin: 1rem 0 0;
+				width: 100%;
+				text-transform: uppercase;
+				font-weight: bold;
+				color: @linkColor;
+				outline: none;
+				border: none;
+				background: none;
+			}
 		}
 		&.open {
 			& > .block-title {
@@ -992,18 +1003,37 @@ HTML{
 }
 
 .bad-search-result {
-	margin: 20px auto;
-	padding: 1rem;
-	max-width: 16rem;
-	color: @color;
-	background: @bgColor;
+	position: fixed;
+	top: 30%;
+	margin: 0 1rem;
+	font-size: 1rem;
+	border: 1px solid @tmColor;
+	background: mix(@tmColor, white, 7%);
+	-webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.2);
+	box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.2);
 	h3 {
+		font-size: 1.25rem;
 		text-align: left;
-		margin: 0 0 0.7rem;
+		margin: 1.5rem;
 	}
 	span {
-		font-size: 0.8rem;
-		color: mix(@color, @bgColor, 50%);
+		display: block;
+		margin: 1.5rem;
+		color: @color;
+	}
+	@media screen {
+		@media (max-width: (12rem - 0.0625)) {
+			top: 0;
+			margin: 0.75rem;
+			h3, span {
+				margin: 13%;
+			}
+		}
+		@media (min-width: 28rem) {
+			left: 50%;
+			width: 26rem;
+			margin: 0 0 0 -13rem;
+		}
 	}
 }
 
