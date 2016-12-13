@@ -2643,20 +2643,28 @@ color: mix(@color, @tmColor, 30%);
 	.panel {
 		text-align: center;
 		.pages {
-			margin: 1rem 0;
-			padding: 1rem 0.5rem;
-			overflow-x: auto;
-			white-space: nowrap;
-			a, b {
-				display: inline-block;
-				padding: 0.5rem 0.75rem;
-				text-decoration: none !important;
-				color: @linkColor;
-				font-weight: bold;
+			margin: 0.5rem 0;
+			a:not(.button), b {
+				display: none;
 			}
-			b {
-				background: mix(@color, @bgColor, 20%);
-				color: @bgColor;
+			select {
+				border: none;
+				outline: none;
+				background: none;
+				cursor: pointer;
+				-webkit-appearance: none;
+				appearance: none;
+			}
+			.button {
+				padding: 0.75rem 7.5%;
+				max-height: 30%;
+				font-weight: bold;
+				color: @linkColor;
+				text-decoration: none;
+				&.disabled {
+					opacity: 0.5;
+					pointer-events: none;
+				}
 			}
 		}
 		.controls {
@@ -2751,6 +2759,11 @@ color: mix(@color, @tmColor, 30%);
 					-webkit-transform: rotate(45deg) translate(-3*@rem, 2*@rem);
 				}
 			}
+		}
+	}
+	.post_body {
+		@media screen and (min-width: (@width)) {
+			min-height: 9rem;
 		}
 	}
 }

@@ -6,9 +6,9 @@
 
 //                                ---- COLOR ----
 
-		@import 'styles/material_light';
+//		@import 'styles/material_light';
 //		@import 'styles/material_dark';
-//		@import 'styles/material_black';
+		@import 'styles/material_black';
 
 //		@import 'styles/new_year';
 
@@ -432,56 +432,52 @@ HTML{
 *	ADM TAGS
 */
 
-.cur {
-	 > .block-title { 
-	 	background: rgb(0,150,0);
-	 }
-}
-.mod {
-	> .block-title { 
-		background: rgb(0,150,225);
+.post-block {
+	&.cur {
+		 > .block-title {background: rgb(0,150,0);}
+		 > .block-body {background: rgba(0,150,0,0.07);}
 	}
-}
-.ex {
-	 > .block-title {
-	 	background: rgb(225,70,40);
-	 }
-}
-
-.cur, .mod, .ex{
-	margin: 1rem 0;
-	display: table;
-	width: 100%;
-	min-height: 5rem;
-	overflow: hidden;
-	.Radius;
-	> .block-title{
-		display: table-cell;
-		vertical-align: middle;
-		color: @bgColor;
-		width: 4rem;
-		text-align: center;
-		height: 100%;
-		font-size: 3rem;
-		border-radius: 0;
+	&.mod {
+		> .block-title {background: rgb(0,150,225);}
+		> .block-body {background: rgba(0,150,225,0.07);}
 	}
-	> .block-body{
-		display: table-cell;
-		vertical-align: middle;
-		text-align: left;
-		padding: 0.5rem;
-		height: 100%;
-		margin: 0;
-		background: mix(@color, @bgColor, 5%);
-		background: rgba(128,128,128,0.1);
+	&.ex {
+		 > .block-title {background: rgb(225,70,40);}
+		 > .block-body {background: rgba(225,70,40,0.07);}
 	}
-	@media screen and (max-width: (@micro)) {
-		> .block-title {
-			font-size: 1.5rem;
-			font-weight: bold;
-			width: 20%
+	&.cur, &.mod, &.ex{
+		margin: 1rem 0;
+		display: table;
+		width: 100%;
+		min-height: 5rem;
+		overflow: hidden;
+		.Radius;
+		> .block-title{
+			display: table-cell;
+			vertical-align: middle;
+			color: @bgColor;
+			width: 4rem;
+			text-align: center;
+			height: 100%;
+			font-size: 3rem;
+			border-radius: 0;
 		}
-		> .block-body {
+		> .block-body{
+			display: table-cell;
+			vertical-align: middle;
+			text-align: left;
+			padding: 0.5rem;
+			height: 100%;
+			margin: 0;
+		}
+		@media screen and (max-width: (@micro)) {
+			> .block-title {
+				font-size: 1.5rem;
+				font-weight: bold;
+				width: 20%
+			}
+			> .block-body {
+			}
 		}
 	}
 }
@@ -3164,86 +3160,30 @@ div[data-post] {
 
 #curator {
 	.panel {
-		position: relative;
-		display: block;
-		margin: 0;
-		padding: 1rem 0;
-		text-align: center;
-		.first-page,
-		.last-page {
-			display: inline-block;
-			max-width: 30%;
-			width: 10rem;
-			margin: 0 -0.2rem;
-			padding: 0;
-			overflow: hidden;
-			box-sizing: border-box;
-			vertical-align: middle;
-			a, b {
-				display: block;
-				padding: 0.5rem 0;
-				font-weight: bold;
-			}
-			b:before, a:before {
-				display: inline-block;
-			}
-		}
-		.first-page {
-			b:before, a:before {
-				content:'<<';
-			}
-		}
-		.last-page {
-			b:before, a:before {
-				content:'>>';
-			}
-		}
 		.pages {
-			display: inline-block;
-			font-size: 1rem;
-			padding: 0;
-			margin: auto;
-			overflow-y: auto;
-			box-sizing: border-box;
-			max-width: 33%;
-			width: 10rem;
-			vertical-align: middle;
-			z-index: 999;
-			a, b {
-				display: block;
-				margin: 0;
-				padding: 0.5rem 0;
-				text-decoration: none !important;
+			margin: 0.5rem 0;
+			a:not(.button), b {
+				display: none;
+			}
+			select {
+				border: none;
+				outline: none;
+				background: none;
+				cursor: pointer;
+				-webkit-appearance: none;
+				appearance: none;
+			}
+			.button {
+				padding: 0.75rem 7.5%;
+				max-height: 30%;
 				font-weight: bold;
-			}
-			&.close {
-				height: 2.4em;
-				overflow: hidden;
-				a, b {
+				color: grey;
+				&.disabled {
+					opacity: 0.5;
 					pointer-events: none;
-					color: @hrefButtonColor;
-				}
-			}
-			&.open {
-				position: fixed;
-				top: 2rem;
-				bottom: 2rem;
-				padding: 1rem 0;
-				margin-left: -100px;
-				width: 200px;
-				max-width: 80%;
-				.Radius;
-				background: @bgColor;
-				.BoxShadow(3);
-				a, b {
-					padding: 1rem;
-					pointer-events: auto;
 				}
 			}
 		}
-		a { color: @hrefButtonColor; }
-		b { color: mix(@tmColor, @hrefButtonColor, 70%);}
-		
 		.controls {
 			margin: 1rem auto;
 			button {
