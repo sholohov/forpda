@@ -6,22 +6,25 @@
 
 //                                ---- COLOR ----
 
-	@import 'styles/steel_light_color';
-//	@import 'styles/steel_dark_color';
+//		@import 'styles/steel_light_color';
+		@import 'styles/steel_dark_color';
 
-@width:				800px;
-@widthPoll:			480px;
+@width:				50em;
+@widthPoll:			30em;
 @rem:				0.0625rem;
 @em:				0.0625em;
+@codeLineHeight:	22*@rem;
 
-.Radius()			{ border-radius: 0.25rem; }   // радиус блоков
+@radius: 0.25rem;
+.Radius()			{ border-radius: @radius; }   // радиус блоков
 
 .BoxShadow(@level: 1) {
-	& when (@level = 1) { -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.1) }
-	& when (@level = 2) { -webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1); box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.1) }
-	& when (@level = 3) { -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1) }
-	& when (@level = 4) { -webkit-box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.1); box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.1) }
-	& when (@level = 5) { -webkit-box-shadow: 0 19px 38px rgba(0,0,0,0.1), 0 15px 12px rgba(0,0,0,0.1); box-shadow: 0 19px 38px rgba(0,0,0,0.1), 0 15px 12px rgba(0,0,0,0.1) }
+	& when (@level = 0) { -webkit-box-shadow: none; box-shadow: none; }
+	& when (@level = 1) { -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.2); box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.2) }
+	& when (@level = 2) { -webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.2); box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.2) }
+	& when (@level = 3) { -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.2); box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.2) }
+	& when (@level = 4) { -webkit-box-oshadow: 0 14px 28px rgba(0,0,0,0.2), 0 10px 10px rgba(0,0,0,0.2); box-shadow: 0 14px 28px rgba(0,0,0,0.2), 0 10px 10px rgba(0,0,0,0.2) }
+	& when (@level = 5) { -webkit-box-shadow: 0 19px 38px rgba(0,0,0,0.3), 0 15px 12px rgba(0,0,0,0.2); box-shadow: 0 19px 38px rgba(0,0,0,0.3), 0 15px 12px rgba(0,0,0,0.2) }
 }
 
 HTML{
@@ -35,8 +38,9 @@ HTML{
 		padding: 0 0 60px;
 		font-size: 1em;
 		font-weight: 1.4;
+		overflow-wrap: break-word;
 		word-break: break-word;
-		overflow: auto;
+		white-space: normal;
 		color: @color;
 		background-color: @tmColor;
 		box-sizing: border-box;
@@ -93,9 +97,11 @@ HTML{
 		margin: 0.5rem 0;
 		.Radius;
 		> .block-title {
+			margin: 0;
+			padding: 0.25rem 0.5rem;
+			border-radius: (@radius - 0.0625) (@radius - 0.0625) 0 0;
 			font-weight: bold;
 			font-style: italic;
-			margin: 0.5rem;
 		}
 		>.block-body{
 			margin: 0.5rem;
@@ -103,10 +109,14 @@ HTML{
 	}
 	&.quote {
 		position: relative;
-		border: 1px solid @bg-quote;
-		background: mix(@bg-quote, @postColor, 40%);
+		border: 1px solid mix(@color, @bg-quote, 10%);
+		background: mix(@postColor, @bg-quote, 10%);
 		>.block-title {
-			color: mix(@color, @linkColor, 8%);
+			margin: 0; 
+			color: saturate(mix(@color, @bg-quote, 40%),50%);
+			border: 1px solid lighten(@bg-quote, 10%);
+			border-bottom-color: desaturate(darken(@bg-quote, 15%),10%);
+			background: @bg-quote;
 			&:empty {
 				&:before {
 					content:'Цитата';
@@ -134,63 +144,140 @@ HTML{
 		}
 	}
 	&.code {
-//		border-radius: 0;
-//		border-left: 0.4rem solid @bg-code;
-		border: 1px solid @bg-code;
-		background: mix(@bg-code, @postColor, 30%);
-		> .block-title, .block-title:empty {
+		counter-reset: num-line;
+		position: relative;
+		overflow-y: hidden;
+		border: 1px solid mix(@color, @bg-code, 10%);
+		background: mix(@postColor, @bg-code, 10%);
+		.line {
+			min-height: @codeLineHeight;
+		}
+		.line:before,
+		.num-pre {
+			counter-increment: num-line;
+			content: counter(num-line);
+			position: absolute;
+			width: 2rem;
+			padding: 0 0.5rem 0 0;
+			text-align: right;
+			font-family: 'Roboto Mono';
+			font-size: 14*@rem;
+			line-height: @codeLineHeight;
+			white-space: pre;
+			color: saturate(mix(@color, @bg-code, 30%), 30%);
+			-webkit-user-select: none;
+		}
+		.line:before {
+			left: 0
+		}
+		.num-pre {
+			left: 0;
+			top: 2.5rem - 0.125;
+			bottom: 0;
+		}
+		&[wraptext="wrap"] {
+			.line:before {
+				dispaly: inline-block;
+			}
+			.num-pre {
+				display: none;
+			}
+		}
+		&[wraptext="pre"] {
+			.toggle-btn {
+				opacity: 0.5;
+			}
+			> .block-body {
+				overflow-wrap: normal;
+				word-break: normal;
+				white-space: pre;
+			}
+			.line:before {
+				display: none;
+			}
+			.num-pre {
+				display: block;
+			}
+		}
+		.toggle-btn {
+			position: absolute;
+			padding: 0.125rem 0.5rem;
+			right: 0;
+			top: 0;
+			cursor: pointer;
+//			border-radius: 0 (@radius - 0.0625) 0 0;
+//			border: 1px solid lighten(@bg-quote, 10%);
+//			border-bottom-color: desaturate(darken(@bg-code, 15%),10%);
+//			background: @bg-code;
+			span {
+				display: none;
+				font-weight: bold;
+				color: saturate(mix(@bg-code, @color, 50%),50%);
+			}
+			&:before {
+				content:'';
+				display: block;
+				width: 1.5rem;
+				height: 1.5rem;
+				background: url(steel_src/wrap_text.svg), url(../steel_src/wrap_text.svg) center no-repeat;
+				background-size: 1.5rem;
+			}
+		}
+		>.block-title {
+			margin: 0 0 0;
+			border-radius: @radius 0 0 0;
+			color: saturate(mix(@color, @bg-code, 40%),50%);
+			border: 1px solid lighten(@bg-code, 10%);
+			border-bottom-color: desaturate(darken(@bg-code, 15%),10%);
+			background: @bg-code;
 			&:before {
 				content:'Код';
 			}
 		}
+		>.block-body {
+			font-family: 'Roboto Mono';
+			padding: 0;
+			margin: 0.5rem 0.5rem 0.5rem 2.5rem;
+			overflow-x: auto;
+			white-space: pre-wrap;
+			font-size: 1rem;
+			line-height: @codeLineHeight;
+			-webkit-tab-size: 4;
+			tab-size: 4;
+			color: saturate(mix(@color, @bg-code, 70%), 50%);
+			background: -webkit-linear-gradient(mix(@postColor, @bg-code, 15%) @codeLineHeight, transparent @codeLineHeight);
+			background: linear-gradient(mix(@postColor, @bg-code, 15%) @codeLineHeight, transparent @codeLineHeight);
+			background-size: @codeLineHeight * 2 @codeLineHeight * 2;
+		}
 		&.box {
-			position: relative;
-			> .block-title, .block-title:empty {
-				position: relative;
+			> .block-title {
 				&:before {
-					content:'Раскрыть КОД';
+					content:'Развернуть Код';
 				}
 			}
 			> .block-body {
-				max-height: 10rem;
-				overflow: hidden;
+				max-height: 9.5rem;
+				overflow-y: hidden;
 			}
 		}
 		&.unbox {
-			> .block-title, .block-title:empty {
+			> .block-title {
 				&:before {
-					content:'Свернуть КОД';
+					content:'Свернуть Код';
 				}
 			}
-		}
-		>.block-title{
-			color: saturate(mix(@bg-code, @color, 50%),50%);
-			&:before{
-				content:'Код: ';
-			}
-			&:empty:before{
-				content:'Код';
-			}
-		}
-		>.block-body {
-			font-family: Courier, Courier New, Verdana, Arial;
-			font-size: 1rem;
-			line-height: 1.4em;
-			white-space: pre-wrap;
-			color: mix(@color, @bg-code, 80%);
-			background: linear-gradient(transparent 1.4em, rgba(130,130,130,0.1) 1.4em);
-			background-size: 2.8em 2.8em;
 		}
 	}
 	&.hidden {
 		border: 1px solid mix(@color, @bg-hidden, 5%);
-		background: mix(@postColor, @bg-hidden, 30%);
+		background: mix(@postColor, @bg-hidden, 10%);
 		>.block-title{
-			color: mix(@color, @bg-hidden, 50%);
-			&:before{
-				content:'Скрытый текст: ';
-			}
-			&:empty:before{
+			color: mix(@color, @bg-hidden, 40%);
+			border: 1px solid lighten(@bg-hidden, 10%);
+			border-bottom-color: desaturate(darken(@bg-hidden, 15%),10%);
+			background: @bg-hidden;
+			&:before,
+			&:empty:before {
 				content:'Скрытый текст';
 			}
 		}
@@ -202,26 +289,52 @@ HTML{
 		position: relative;
 		box-sizing: border-box;
 		>.block-title {
+			position: relative;
 			margin: 0.5rem 0;
-			padding: 6*@rem 7*@rem;
+			padding: 6*@rem 1.25rem 6*@rem 1.125rem;
 			font-style: normal;
 			color: @color;
 			font-size: 1rem;
 			overflow: hidden;
 			.Radius;
-//			.Border;
 			.Gradient;
 			border: 1px solid @borderColor + 10%;
 			border-bottom: 1px solid @borderColor;
 			&:before {
+				position: absolute;
+				left: 6*@rem;
+				top: 6*@rem;
+				bottom: 6*@rem;
 				display: inline-block;
+				border-radius: 1px;
 				font-size: 1rem;
 				content:'';
-				height: 1.4rem;
-				margin: -0.2em 0.5rem 0 0;
-				border-left: 0.3rem solid;
+				width: 4*@rem;
 				vertical-align: middle;
 			}
+			.anchor {
+				position: absolute;
+				right: 0;
+				top: 0;
+				span {
+					display: none;
+				}
+				&:before {
+					content:'';
+					display: block;
+					width: 16*@rem;
+					height: 16*@rem;
+					padding: 8*@rem;
+					opacity: 0.75;
+					font-weight: bold;
+					text-align: center;
+					background-repeat: no-repeat;
+					background-position: center;
+					background-size: 20*@rem;
+					background-image: url(steel_src/link_blue.svg), url(../steel_src/link_blue.svg);
+				}
+			}
+			&.empty:after,
 			&:empty:after {
 				position: relative;
 				display: inline;
@@ -235,11 +348,26 @@ HTML{
 			.Radius;
 			border: 1px solid @borderColor;
 			background: @postColor;
+			.spoil_close {
+				display: block;
+				margin: 1rem 0 0;
+				width: 100%;
+				text-transform: uppercase;
+				font-size: 14*@rem;
+				font-weight: bold;
+				color: @linkColor;
+				outline: none;
+				border: none;
+				background: none;
+			}
 		}
 		&.close {
 			> .block-title {
 				&:before {
-					border-left-color: #58c;
+					background-color: #58c;
+				}
+				.anchor:before {
+					background-image: url(steel_src/link_blue.svg), url(../steel_src/link_blue.svg);
 				}
 			}
 			> .block-body {
@@ -249,8 +377,11 @@ HTML{
 		&.open {
 			> .block-title {
 				color: mix(@color, @bgColor, 60%);
+				.anchor:before {
+					background-image: url(steel_src/link_grey.svg), url(../steel_src/link_grey.svg);
+				}
 				&:before {
-					border-left-color: mix(@color, @bgColor, 40%);
+					background-color: mix(@color, @bgColor, 40%);
 				}
 			}
 		}
@@ -327,7 +458,6 @@ HTML{
 			font-weight: bold;
 			text-align: center;
 			.Radius;
-//			.Border;
 			border: 1px solid @borderColor;
 			border-bottom: 1px solid @borderColor - 15%;
 			.Gradient;
@@ -357,6 +487,7 @@ HTML{
 			padding: 0.7rem 1rem;
 			text-decoration: none;
 			background: -webkit-linear-gradient(left, @tmColor 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.2) 80%, @tmColor 100%);
+			background: linear-gradient(left, @tmColor 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.2) 80%, @tmColor 100%);
 			span {
 				&.name {
 					display: block;
@@ -462,7 +593,7 @@ HTML{
 //	overflow: hidden;
 	.hidetop {
 		margin: 0.5rem;
-		padding: 6*@rem 7*@rem;
+		padding: 6*@rem 7*@rem  6*@rem 1.125rem;
 		.Radius;
 		border: 1px solid @borderColor;
 		border-bottom: 1px solid @borderColor - 15%;
@@ -483,7 +614,6 @@ HTML{
 	}
 	.hidemain {
 		.Radius;
-		.Border;
 		margin: 0.5rem;
 		border: 1px solid @borderColor;
 		background: @postColor;
@@ -701,13 +831,14 @@ HTML{
 			right: 0;
 			width: 13.25rem;
 			border-bottom: 1px solid rgba(0,0,0,0.1);
-			.BoxShadow(2);
+			-webkit-box-shadow: 6px 0 6px -3px rgba(0,0,0,0.1), 4px 0 2px -2px rgba(0,0,0,0.05);
+			box-shadow: 6px 0 6px -3px rgba(0,0,0,0.1), 4px 0 2px -2px rgba(0,0,0,0.05);	
 		}
 	}
 	&.active {
 		margin-top: 3rem;
 		&:after {
-			content:'- Новые сообщения -';
+			content:'- целевое сообщение -';
 			font-weight: bold;
 			position: absolute;
 			top: -2.125rem;
@@ -737,7 +868,6 @@ HTML{
     border-radius: 0.2rem 0.2rem 0 0;
     border-top: 1px solid lighten(@postColor, 20%);
 	border-bottom: 1px solid rgba(0,0,0,0.1);
-//	border-bottom: 1px solid @borderColor - 20%;
 	background: -webkit-gradient(linear, left top, left bottom,
 				color-stop(2%, @blue), 
 				color-stop(100%, @postColor));
@@ -880,7 +1010,7 @@ HTML{
 			background: url(steel_src/more.svg) center no-repeat;
 			background-size: 1.5rem;
 			cursor: pointer;
-			@media screen and (max-width: (@width - 1px)) {
+			@media screen and (max-width: (@width)) {
 				position: absolute;
 				right: 0.125rem;
 				bottom: 0.5rem;
@@ -1015,6 +1145,7 @@ div[data-post] {
 #preview .post_body {
 	margin-left: 0.7rem;
 }
+
 /*
  *	POST_FOOTER
 */
@@ -1025,8 +1156,7 @@ div[data-post] {
 	position: relative;
 	clear: both;
 	font-size: 0.625rem;
-	margin: ;
-	padding: 0.5rem 0 0.5rem  0.5rem;
+	padding: 0.5rem 0 0.5rem 0.5rem;
 	text-align: center;
 	-webkit-user-select: none;
 	user-select: none;
@@ -1058,18 +1188,16 @@ div[data-post] {
 		font-weight: bold;
 		text-align: center;
 		text-decoration: none;
-//		text-transform: lowercase;
 		color: mix(@color, @bgColor, 50%);
 		.Radius;
-//		.Border;
-//		.BoxShadow(1);
+		overflow: hidden;
 		border: 1px solid @borderColor;
 		border-bottom: 1px solid @borderColor - 10%;
 		.Gradient;
+		@buttonShadow;
 		cursor: pointer;
 		span {
 			position: relative;
-//			top: -2*@em;
 		}
 		&.claim,
 		&.quote,
@@ -1089,7 +1217,7 @@ div[data-post] {
 		&.delete {
 			float: right;
 		}
-		@media screen and (max-width: (@width)) {
+		@media screen and (max-width: (@width - @em)) {
 			&.claim,
 			&.edit,
 			&.delete {
@@ -1099,13 +1227,14 @@ div[data-post] {
 				float: right;
 			}
 		}
-		@media screen and (max-width: 400px) {
+		@media screen and (max-width: (25em - @em)) {
 			min-width: 2rem;
 			&.quote {
 				&:before{
 					content:'Цит';
 					color: transparent;
 					display: inline-bliock;
+					opacity: 0.9;
 					background: url(steel_src/quote.svg) center no-repeat;
 					background-size: 1.5rem;
 				}
@@ -1115,6 +1244,7 @@ div[data-post] {
 					content:'Ник';
 					color: transparent;
 					display: inline-bliock;
+					opacity: 0.9;
 					background: url(steel_src/reply.svg) center no-repeat;
 					background-size: 1.5rem;
 				}
@@ -1139,7 +1269,7 @@ div[data-post] {
 				}
 			}
 		}
-		@media screen and (min-width: 401px) {
+		@media screen and (min-width: 25em) {
 			&.bad {
 				padding-left: 0.7rem;
 				padding-right: 0.7rem;
@@ -1152,39 +1282,41 @@ div[data-post] {
 	}
 }
 
-
 /*
 *	SEARCH
 */
 
 .search-results {
-	.topic_title_post {
-		margin: -0.25rem 0 0 !important;
-		a {
-			display: block;
-			position: relative;
-			padding: 0.75rem;
-			text-align: center;
-			text-decoration: none;
-			font-weight: bold;
-			color: mix(@color, @bgColor, 50%);
-			border-bottom: 1px solid @borderColor;
-			background: @postColor;
-		}
-	}
-	.post_header {
-		min-height: 2.2rem;
-		padding-top: 0.75rem;
-		text-align: center;
-		.date {
-			border: none;
-			color: mix(@color, @bgColor, 50%);
-			font-size: 0.875rem;
-		}
-		.nick {
-			span {
+	.post_container {
+		overflow: hidden;
+		.topic_title_post {
+			margin: -0.25rem 0 0 !important;
+			a {
+				display: block;
+				position: relative;
+				padding: 0.75rem;
+				text-align: center;
+				text-decoration: none;
 				font-weight: bold;
-				font-size: 1.125rem;
+				color: mix(@color, @bgColor, 50%);
+				border-bottom: 1px solid @borderColor;
+				background: @postColor;
+			}
+		}
+		.post_header {
+			min-height: 2.2rem;
+			padding-top: 0.75rem;
+			text-align: center;
+			.date {
+				border: none;
+				color: mix(@color, @bgColor, 50%);
+				font-size: 0.875rem;
+			}
+			.nick {
+				span {
+					font-weight: bold;
+					font-size: 1.125rem;
+				}
 			}
 		}
 	}
@@ -1192,58 +1324,13 @@ div[data-post] {
 .searchlite{
 	color:#FF6A00;
 }
-.postcolor {
-	height: auto !important;
-	padding: 0.5rem;
-	margin: 0 -0.5rem;
-	max-height: 18rem;
-}
-.signature{
-	position: relative;
-	font-size: 0.875rem;
-	@media screen and (min-width: (@width)) {
-		margin: -2rem 0 0;
-		padding: 0.7rem 0;
-		border-radius: 0;
-		-webkit-box-shadow: none;
-		box-shadow: none;
-		background: @postColor;
-	}
-	&:before {
-		display: block;
-		content:'Подпись:';
-		font-weight: bold;
-		color: mix(@color, @bgColor, 50%);
-		padding: 0.5rem 0;
-	}
-}
-.s_post_footer{ 
-	&:extend(.post_footer);
-	padding: 0.5rem;
-	font-size: 0.875rem;
-	font-weight: normal;
-	color: mix(@color, @bgColor, 50%);
-	border-top: 1px solid @borderColor;
-	a {
-		color: @linkColor;
-		text-decoration: none;	
-	}
-	& ~ .between_messages ~ .topic_title_post ~ .post_header {
-		margin-top: 0 !important;
-	}
-}
-
 .bad-search-result {
-	font-size: 1rem;
 	position: fixed;
-	top: 40%;
-	left: 50%;
-	width: 19rem;
-	margin: 0.5rem;
-	margin-left: -9.5rem;
-	margin-top: -4rem;
+	top: 30%;
+	margin: 0 1rem;
+	font-size: 1rem;
 	.Radius;
-	.BoxShadow(2);
+	.BoxShadow(3);
 	background: @bgColor;
 	h3 {
 		font-size: 1.25rem;
@@ -1254,6 +1341,20 @@ div[data-post] {
 		display: block;
 		margin: 1.5rem;
 		color: mix(@color, @bgColor, 50%);
+	}
+	@media screen {
+		@media (max-width: (12em - @em)) {
+			top: 0;
+			margin: 0.75rem;
+			h3, span {
+				margin: 13%;
+			}
+		}
+		@media (min-width: 28em) {
+			left: 50%;
+			width: 26rem;
+			margin: 0 0 0 -13rem;
+		}
 	}
 }
 
@@ -1460,7 +1561,7 @@ div[data-post] {
 					color: green;
 				}
 			}
-			@media screen and (max-width: 19rem) {
+			@media screen and (max-width: 19em) {
 				width: auto;
 				margin: 0;
 				left: 1rem;
@@ -2288,16 +2389,16 @@ div[data-post] {
 		.comment-list {	
 			padding-left: 0.2rem;
 			@media screen {
-				@media (min-width: 320px) {
+				@media (min-width: 20em) {
 					padding-left: 0.5rem;
 				}
-				@media (min-width: 480px) {
+				@media (min-width: 30em) {
 					padding-left: 0.7rem;
 				}
-				@media (min-width: 640px) {
+				@media (min-width: 40em) {
 					padding-left: 1rem;
 				}
-				@media (min-width: 720px) {
+				@media (min-width: 50em) {
 					padding-left: 1.2rem;
 				}
 			}
@@ -2960,85 +3061,30 @@ div[data-post] {
 
 #curator {
 	.panel {
-		position: relative;
-		display: block;
-		margin: 0;
-		padding: 1rem 0;
-		text-align: center;
-		.first-page,
-		.last-page {
-			display: inline-block;
-			max-width: 30%;
-			width: 10rem;
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-			box-sizing: border-box;
-			vertical-align: middle;
-			a, b {
-				display: block;
-				padding: 0.5rem 0;
-				font-weight: bold;
-			}
-			b:before, a:before {
-				display: inline-block;
-			}
-		}
-		.first-page {
-			b:before, a:before {
-				content:'<<';
-			}
-		}
-		.last-page {
-			b:before, a:before {
-				content:'>>';
-			}
-		}
 		.pages {
-			display: inline-block;
-			font-size: 1rem;
-			padding: 0;
-			margin: auto;
-			overflow-y: auto;
-			box-sizing: border-box;
-			width: 10rem;
-			vertical-align: middle;
-			z-index: 999;
-			a, b {
-				display: block;
-				margin: 0;
-				padding: 0.5rem 0;
-				text-decoration: none !important;
+			margin: 0.5rem 0;
+			a:not(.button), b {
+				display: none;
+			}
+			select {
+				border: none;
+				outline: none;
+				background: none;
+				cursor: pointer;
+				-webkit-appearance: none;
+				appearance: none;
+			}
+			.button {
+				padding: 0.75rem 7.5%;
+				max-height: 30%;
 				font-weight: bold;
-			}
-			&.close {
-				height: 2.4em;
-				overflow: hidden;
-				a, b {
+				color: grey;
+				&.disabled {
+					opacity: 0.5;
 					pointer-events: none;
-					color: @hrefButtonColor;
-				}
-			}
-			&.open {
-				position: fixed;
-				top: 2rem;
-				bottom: 2rem;
-				padding: 1rem 0;
-				margin-left: -100px;
-				width: 200px;
-				max-width: 80%;
-				.Radius;
-				background: @bgColor;
-				.BoxShadow(3);
-				a, b {
-					padding: 1rem;
-					pointer-events: auto;
 				}
 			}
 		}
-		a { color: @hrefButtonColor; }
-		b { color: mix(@tmColor, @hrefButtonColor, 70%);}
-		
 		.controls {
 			margin: 1rem auto;
 			button {
@@ -3056,9 +3102,13 @@ div[data-post] {
 			}
 		}
 	}
+	.post_container {
+		clear: both;
+		overflow-y: hidden;
+	}
 	.post_header {
 		position: relative;
-		padding: 0 0 0.5rem;
+		padding: 0 0.5rem 0.5rem;
 		a {
 			text-decoration: none !important;
 		}
@@ -3114,7 +3164,7 @@ div[data-post] {
 					.Radius;
 					overflow: hidden;
 					border: 0.125rem solid mix(@color, @bgColor, 50%);
-					background: @bgColor;
+					background: mix(@linkColor, @postColor, 5%);
 					&:before {
 						content:'';
 						position: absolute;
