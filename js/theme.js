@@ -54,7 +54,7 @@ function blocksOpenClose() {
  *		==================
  */
 
-function spoilCloseButton(t) {
+function spoilCloseButton(t,imgSrc) {
 	while (!t.classList.contains('.post-body')) {
 		if (t.classList.contains('spoil') && !t.querySelector('.spoil_close') && t.clientHeight > document.documentElement.clientHeight) {
 			var bb = t.querySelector('.block-body');
@@ -90,7 +90,6 @@ function onLoadSpoilCloseButton(img) {
 
 document.addEventListener('DOMContentLoaded', removeImgesSrc);
 
-var countLoadImage = 0;
 function removeImgesSrc() {
 	if (document.body.classList.contains("noimages")) return;
 	var postBlockSpoils = document.body.querySelectorAll('.post-block.spoil.close > .block-body');
@@ -101,9 +100,7 @@ function removeImgesSrc() {
 			if (!img.hasAttribute('src') || img.dataset.imageSrc) continue;
 			img.dataset.imageSrc = img.src;
 			img.removeAttribute('src');
-			img.addEventListener('load', function() {
-				countLoadImage++;
-				document.body.insertAdjacentHTML("beforeEnd",'<div>'+countLoadImage+'</div>');
+			images[images.length].addEventListener('load', function() {
 				onLoadSpoilCloseButton(img);
 			});
 		}
