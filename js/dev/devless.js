@@ -1,13 +1,14 @@
 (function($) {
-	var
-		devbar = $('#devbar'),
+	var devbar = $('#devbar'),
 		tabs = devbar.find("#dev-tabs"),
 		content = devbar.find("#dev-content"),
-		styleElement = $('<style type="text/css">');
+		styleElement = $('<style type="text/css">'),
+		applyStr = 'Применить изменения';
+		
 	tabs.append('<button class="btn" data-tab="less">L</button><button class="btn" data-tab="edit">E</button>');
 	content.append('<div data-tab-name="less">\
-	<h1>CSS/LESS</h1>\
-	' + (window["DEVOUT"] && window["DEVOUT"]["showChooseCssDialog"] ? '<input type="hidden" id="dev-less-file-path"><button class="btn" id="dev-less-file-compile">Выбрать / Применить стиль</button>' : '<input type="file" id="dev-less-file-select"/> <button class="btn" id="dev-less-file-compile">Применить</button>') + '\
+<h1>CSS/LESS</h1>\
+' + (window["DEVOUT"] && window["DEVOUT"]["showChooseCssDialog"] ? '<input type="hidden" id="dev-less-file-path"><button class="btn" id="dev-less-file-compile">Выберите стиль</button>' : '<input type="file" id="dev-less-file-select"/> <button class="btn" id="dev-less-file-compile">Применить</button>') + '\
 <br /><br />\
 <button id="dev-less-show" class="btn" data-toggle="hide-element" data-target="#dev-less-out"  disabled="disabled">Итоговый код</button>\
 <button id="dev-copy-css" class="btn">Копировать Код</button>\
@@ -21,20 +22,23 @@
 </div>');
 	$('head').append(styleElement);
 
+	// COPYPAST BUTTON
+	// Кнопка копирования содержимого textarea (результата компиляции less) в буфер обмена.
+	// Если "инструменты разработчика" исользуются совмесно с приложением WDB, то
+	// используется метод DEVOUT.copyPast(str) для копиррования в буфер иначе этой кнопки нет
+	
 	var copyCssBtn = document.querySelector('#dev-copy-css');
 	if (window['DEVOUT'] && window['DEVOUT']['copyPast']) {
 		copyCssBtn.addEventListener('click', copyCssBtnFoo);
+
 		function copyCssBtnFoo() {
 			var txt = document.querySelector('#dev-less-out');
-			if (txt.value != '') {
-				DEVOUT.copyPast(txt.value);
-			} else {
-				alert('Нечего сохранять...');
-			}
+			if (txt.value != '') DEVOUT.copyPast(txt.value);
+			else alert('Нечего сохранять...');
 		}
-	} else {
-		copyCssBtn.hidden = true;
-	}
+	} else copyCssBtn.hidden = true;
+
+	// end - COPYPAST BUTTON
 	
 	function parseLess(str) {
 		less.render(
@@ -52,10 +56,11 @@
 				styleElement.html(output.css);
 				$('#dev-less-out').val(output.css);
 				$('#dev-less-show').removeAttr("disabled");
+				if ($('#dev-less-out')[0].value.length != 0) $('#dev-less-file-compile').html(applyStr);
 			},
 			function(err) {
 				$('#dev-less-out').val('');
-				//    			$('#dev-less-edit').val ( '' );
+				// $('#dev-less-edit').val ( '' );
 				$('#dev-less-error').show().html('Line ' + err.line + ' Index ' + err.index + ' Message: ' + err.message + "\n" + err.extract.join("\n") + '<br /><br /><button class="btn button_error" onclick="$(&quot;#dev-less-error&quot;).html(&quot;&quot;).hide();$(&quot;#dev-less-show&quot;).removeAttr(&quot;disabled&quot;);return false;">HIDE</button>');
 				$('#dev-less-show').attr("disabled", "disabled");
 			}
@@ -65,53 +70,52 @@
 
 	$('body')
 		.on('click', '#dev-less-edit-compile', function(ev) {
-				ev.preventDefault();
-				parseLess($('#dev-less-edit').val());
-			})
+			ev.preventDefault();
+			parseLess($('#dev-less-edit').val());
+		})
 		.on('click', '#dev-less-file-compile', function(ev) {
-				ev.preventDefault();
-				if (window["DEVOUT"] && window["DEVOUT"]["showChooseCssDialog"]) {
-
-					if ($('#dev-less-file-path')[0].value.length == 0) {
-						DEVOUT.showChooseCssDialog();
-					} else {
-						DEVOUT.acceptStyle($('#dev-less-file-path')[0].value);
-					}
+			ev.preventDefault();
+			if (window["DEVOUT"] && window["DEVOUT"]["showChooseCssDialog"]) {
+				if ($('#dev-less-file-path')[0].value.length == 0) {
+					DEVOUT.showChooseCssDialog();
 				} else {
-					if ($('#dev-less-file-select')[0].files.length != 1) {
-						alert('Выберите файл стиля!');
-					} else {
-						var file = $('#dev-less-file-select')[0].files[0];
-						var reader;
-						try {
-							reader = new FileReader();
-						} catch (e) {}
-						if (!reader) {
-							alert('Невозможно прочитать файл стиля, недостаточно прав.');
-						} else {
-							reader.onloadend = function(evt) {
-								if (evt.target.readyState == FileReader.DONE) {
-									if (evt.target.error) {
-										var n = false;
-										for (var m in evt.target.error) {
-											if (evt.target.error[m] == evt.target.error.code) {
-												n = m;
-											}
-										}
-										if (!n) {
-											n = 'UNKNOWN ERROR CODE: ' + evt.target.error.code;
-										}
-										alert(n);
-									} else {
-										parseLess(evt.target.result);
-									}
-								}
-							};
-							reader.readAsText(file.webkitSlice ? file.webkitSlice(0, file.size) : file.slice(0, file.size), "UTF-8");
-						}
-					}
-
+					DEVOUT.acceptStyle($('#dev-less-file-path')[0].value);
+					$('#dev-less-file-compile').html(applyStr);
 				}
-			});
+			} else {
+				if ($('#dev-less-file-select')[0].files.length != 1) {
+					alert('Выберите файл стиля!');
+				} else {
+					var file = $('#dev-less-file-select')[0].files[0];
+					var reader;
+					try {
+						reader = new FileReader();
+					} catch (e) {}
+					if (!reader) {
+						alert('Невозможно прочитать файл стиля, недостаточно прав.');
+					} else {
+						reader.onloadend = function(evt) {
+							if (evt.target.readyState == FileReader.DONE) {
+								if (evt.target.error) {
+									var n = false;
+									for (var m in evt.target.error) {
+										if (evt.target.error[m] == evt.target.error.code) {
+											n = m;
+										}
+									}
+									if (!n) {
+										n = 'UNKNOWN ERROR CODE: ' + evt.target.error.code;
+									}
+									alert(n);
+								} else {
+									parseLess(evt.target.result);
+								}
+							}
+						};
+						reader.readAsText(file.webkitSlice ? file.webkitSlice(0, file.size) : file.slice(0, file.size), "UTF-8");
+					}
+				}
+			}
+		});
 	parseLess('');
 })(jQuery);

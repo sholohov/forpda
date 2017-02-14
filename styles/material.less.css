@@ -6,9 +6,9 @@
 
 //                                ---- COLOR ----
 
-//		@import 'styles/material_light';
+		@import 'styles/material_light';
 //		@import 'styles/material_dark';
-		@import 'styles/material_black';
+//		@import 'styles/material_black';
 
 //		@import 'styles/new_year';
 
@@ -48,7 +48,6 @@ HTML{
 		padding: 0.5rem 0 5rem;
 		font-size: 1em;
 		overflow-wrap: break-word;
-		word-break: break-word;
 		white-space: normal;
 		color: @color;
 		box-sizing: border-box;
@@ -180,7 +179,7 @@ HTML{
 		}
 		&[wraptext="wrap"] {
 			.line:before {
-				dispaly: inline-block;
+				display: inline-block;
 			}
 			.num-pre {
 				display: none;
@@ -811,7 +810,7 @@ HTML{
 				}
 			}
 			.votes_info {
-				margint-top: 0.75rem;
+				margin-top: 0.75rem;
 				text-align: center;
 			}
 			.buttons {
@@ -1666,7 +1665,7 @@ div[data-post] {
 	iframe {
 		max-width: 100%;
 		width: 480px;
-		heigt: 360px;
+		height: 360px;
 		@media screen {
 			@media (max-width: 360px) {
 				width: 240px;
@@ -2209,7 +2208,7 @@ div[data-post] {
 		width: 100%;
 		TR {
 			margin: 0;
-			bacground: mix(@color, @bgColor, 3%);
+			background: mix(@color, @bgColor, 3%);
 			&:nth-child(2n) {
 				background: mix(@color, @bgColor, 5%);
 			}
@@ -2254,7 +2253,7 @@ div[data-post] {
 						border: none;
 					}
 					strong {
-						diasplay: block;
+						display: block;
 						A {
 							display: inline-block;
 							position: relative;
@@ -2442,7 +2441,6 @@ div[data-post] {
 		text-align: left;
 		margin: 0.5rem;
 		padding: 0;
-		word-break: break-word;
 		background: @bgColor;
 		.Radius;
 		.BoxShadow(1);

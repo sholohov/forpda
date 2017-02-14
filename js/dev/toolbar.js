@@ -58,9 +58,9 @@ z-index:998;";
 //
 
 function toolBarHide() {
-		var toolBarHideButton = document.createElement('label');
-		toolBarHideButton.innerHTML = 'T <input type="checkbox" style="display:none">';
-		toolBarHideButton.style.cssText = "position:fixed;\
+	var toolBarHideButton = document.createElement('label');
+	toolBarHideButton.innerHTML = 'T <input type="checkbox" style="display:none">';
+	toolBarHideButton.style.cssText = "position:fixed;\
 		right:0;\
 		bottom:0;\
 		width: 32px;\
@@ -74,12 +74,12 @@ function toolBarHide() {
 		opacity: 0.5;\
 		background:rgb(128,128,128);\
 		z-index:999;";
-		body.appendChild(toolBarHideButton);
-		
-		toolBarHideButton.addEventListener('click',function() {
-				if (toolBarHideButton.querySelector('input[type="checkbox"]').checked) body.appendChild(devToolBar);
-				else body.removeChild(devToolBar);
-		});
+	body.appendChild(toolBarHideButton);
+
+	toolBarHideButton.addEventListener('click', function() {
+		if (toolBarHideButton.querySelector('input[type="checkbox"]').checked) body.appendChild(devToolBar);
+		else body.removeChild(devToolBar);
+	});
 }
 toolBarHide();
 
@@ -88,30 +88,30 @@ toolBarHide();
 //
 
 function showOutlineElements() {
-		var label = document.createElement('label');
-		label.id = 'outline_elements';
-		label.className = 'button';
-		label.innerHTML = 'OUTLINE';
-		devToolBar.appendChild(label);
+	var label = document.createElement('label');
+	label.id = 'outline_elements';
+	label.className = 'button';
+	label.innerHTML = 'OUTLINE';
+	devToolBar.appendChild(label);
 
-		var checkbox = document.createElement('input');
-		checkbox.type = "checkbox";
-		label.appendChild(checkbox);
+	var checkbox = document.createElement('input');
+	checkbox.type = "checkbox";
+	label.appendChild(checkbox);
 
-		var outlineStyle = document.createElement('style');
-		outlineStyle.innerHTML = "*, :before, :after {outline: 1px solid rgba(255,100,0,0.5);}";
+	var outlineStyle = document.createElement('style');
+	outlineStyle.innerHTML = "*, :before, :after {outline: 1px solid rgba(255,100,0,0.5);}";
 
-		checkbox.addEventListener('change', toggleOutline);
-		function toggleOutline() {
-				if (checkbox.checked) {
-						document.body.appendChild(outlineStyle);
-						label.classList.add('active');
-				}
-				else {
-						document.body.removeChild(outlineStyle);
-						label.classList.remove('active');
-				}
+	checkbox.addEventListener('change', toggleOutline);
+
+	function toggleOutline() {
+		if (checkbox.checked) {
+			document.body.appendChild(outlineStyle);
+			label.classList.add('active');
+		} else {
+			document.body.removeChild(outlineStyle);
+			label.classList.remove('active');
 		}
+	}
 }
 showOutlineElements();
 
@@ -134,25 +134,25 @@ showOutlineElements();
 //
 
 function imagesSwitch() {
-		var imagesSwitchButton = document.createElement('button');
-		imagesSwitchButton.innerHTML = 'AVA_OFF';
-		imagesSwitchButton.id = "avatar_off";
-		imagesSwitchButton.className = "button";
-		devToolBar.appendChild(imagesSwitchButton);
-		
-		imagesSwitchButton.addEventListener('click',imagesSwitchButtonClick);
-		function imagesSwitchButtonClick() {
-				for (var i= 0; i < avatar.length; i++) {
-						if (avatar[i].classList.contains('disable')) {
-								avatar[i].classList.remove('disable');
-								imagesSwitchButton.classList.remove('active');
-						}
-						else {
-								avatar[i].classList.add('disable');
-								imagesSwitchButton.classList.add('active');
-						}
-				}
+	var imagesSwitchButton = document.createElement('button');
+	imagesSwitchButton.innerHTML = 'AVA_OFF';
+	imagesSwitchButton.id = "avatar_off";
+	imagesSwitchButton.className = "button";
+	devToolBar.appendChild(imagesSwitchButton);
+
+	imagesSwitchButton.addEventListener('click', imagesSwitchButtonClick);
+
+	function imagesSwitchButtonClick() {
+		for (var i = 0; i < avatar.length; i++) {
+			if (avatar[i].classList.contains('disable')) {
+				avatar[i].classList.remove('disable');
+				imagesSwitchButton.classList.remove('active');
+			} else {
+				avatar[i].classList.add('disable');
+				imagesSwitchButton.classList.add('active');
+			}
 		}
+	}
 }
 imagesSwitch();
 
@@ -161,24 +161,24 @@ imagesSwitch();
 //
 
 function avatarCircle() {
-		var avatarCircleButton = document.createElement('button');
-		avatarCircleButton.innerHTML = 'AVA_CIRCLE';
-		avatarCircleButton.id = "avatar_circle";
-		avatarCircleButton.className = "button";
-		devToolBar.appendChild(avatarCircleButton);
-		
-		avatarCircleButton.addEventListener('click',avatarCircleButtonClick);
-		function avatarCircleButtonClick() {
-				for (var i= 0; i < avatar.length; i++) {
-						if (avatar[i].classList.contains('circle')) {
-							avatar[i].classList.remove('circle');
-							avatarCircleButton.classList.remove('active');
-						}
-						else {
-								avatar[i].classList.add('circle');
-								avatarCircleButton.classList.add('active');
-						}
-				}
+	var avatarCircleButton = document.createElement('button');
+	avatarCircleButton.innerHTML = 'AVA_CIRCLE';
+	avatarCircleButton.id = "avatar_circle";
+	avatarCircleButton.className = "button";
+	devToolBar.appendChild(avatarCircleButton);
+
+	avatarCircleButton.addEventListener('click', avatarCircleButtonClick);
+
+	function avatarCircleButtonClick() {
+		for (var i = 0; i < avatar.length; i++) {
+			if (avatar[i].classList.contains('circle')) {
+				avatar[i].classList.remove('circle');
+				avatarCircleButton.classList.remove('active');
+			} else {
+				avatar[i].classList.add('circle');
+				avatarCircleButton.classList.add('active');
+			}
 		}
+	}
 }
 avatarCircle();

@@ -6,7 +6,6 @@
 		</div>\n\
 		<div id="dev-content"></div>\n\
 	</div>\n'));
-	/*less.Parser().parse ( */
 	less.render('\
 #devbar{\
 	position:fixed;\
@@ -138,10 +137,7 @@
 }', {}).then(function(output) {
 		$('head').append('<style type="text/css">' + output.css + '</style>');
 	}, function(error) {});
-	/*, function ( error, result ) {
-    $('head').append ( '<style type="text/css">'+result.toCSS()+'</style>' ); }
-);*/
-
+	
 	$('[data-toggle="open"][data-target="#devbar"]').click(function() {
 		$(this).next().click();
 	});
